@@ -1,0 +1,152 @@
+
+/* Elements */
+a {
+	text-decoration: none;
+}
+
+button {
+	margin-left: 2%;
+	margin-right: 2%;
+}
+
+h2 {
+	text-align: center;
+	padding: 0;
+	border: 0;
+	margin: 2%;
+}
+
+/* Ids */
+#banner {
+	display: grid;
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	border: 2px solid black;
+	grid-template-columns: auto auto auto;
+	align-items: center;
+	padding-left: 1%;
+	padding-right: 1%;
+	margin-bottom: 1%;
+}
+
+#buttons {
+	display: inline-flex;
+	justify-content: flex-end;
+	gap: 1%;
+}
+
+#content {
+	display: grid;
+	grid-template-columns: auto auto;
+	grid-template-rows: auto auto;
+	gap: 3%;
+	min-height: 85vh
+}
+
+#courseFinder {
+}
+
+#courseFinderBanner {
+}
+
+#courseCredits {
+}
+
+#courseDescription {
+}
+
+#courseId {
+}
+
+#courseName {
+}
+
+#logoBox {
+	justify-content: flex-start;
+}
+
+#lowerLeft {
+	display: grid;
+	grid-template-columns: auto;
+	border: 2px solid black;
+}
+
+#lowerRight {
+	border: 2px solid black;
+}
+
+#studentInfo {
+	display: inline-grid;
+	grid-template-columns: auto auto;
+	grid-template-rows: auto auto;
+	justify-content: right;
+	gap: 5%;
+}
+
+#studentCatalog {
+}
+
+#studentCredits {
+}
+
+#studentMajor {
+}
+
+#studentMinor {
+}
+
+#studentName {
+}
+
+#upperLeft {
+	border: 2px solid black;
+}
+
+#upperRight {
+	display: grid;
+	grid-template-columns: auto;
+	border: 2px solid black;
+}
+
+
+/* Classes */
+.accordion {
+}
+
+.accordionHeader {
+}
+
+.accordionItem {
+}
+
+.button {
+	display: inline-block;
+	border: 1px solid black;
+	padding: 5%;
+}
+
+.condense {
+	padding: 0;
+	border: 0;
+	margin: 0;
+}
+
+.scrollbox {
+	display: contents;
+	overflow-y: scroll;
+	background-color: blue;
+}
+
+.semester {
+	display: flex;
+	border: 1px solid black;
+	padding: 2%;
+	margin: 3%;
+}
+
+.year {
+	display: grid;
+	grid-template-columns: auto auto auto;
+	grid-template-rows: auto;
+}

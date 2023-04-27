@@ -1,0 +1,68 @@
+extends layout
+
+block content
+  // Banner
+  #banner 
+    #logobox 
+      p Logo 
+    #studentInfo 
+      // Pipe chars preserve space at the end of a line
+      p#studentName Student: 
+      p#studentMajor Major: 
+      p#studentCatalog Catalog: 
+      p#studentMinor Minor: Bible 
+    #buttons 
+      .button Logout 
+      .button Options 
+      .button Save 
+  
+  // Content
+  #content 
+
+    // Upper Left
+    #upperLeft 
+      h2 Requirements 
+      #accordion 
+
+    // Upper Right
+    #upperRight 
+      h2 Academic Plan 
+      p#studentCredits.condense Total Credits: 
+      .scrollbox 
+        .year 
+          .semester Fall 
+          .semester Spring 
+          .semester Summer
+        .year 
+          .semester Fall 
+          .semester Spring 
+          .semester Summer
+        .year 
+          .semester Fall 
+          .semester Spring 
+          .semester Summer
+        .year 
+          .semester Fall 
+          .semester Spring 
+          .semester Summer
+
+    // Lower Left
+    #lowerLeft 
+      h2 Links 
+      button Home 
+      button Josiah 
+      button Silas 
+      button Spencer 
+      // TODO: Delete; this is just a test link
+      button
+        a(href="/users") Users Page
+    
+    // Lower Right
+    #lowerRight 
+      h2 Course Finder 
+      #courseFinderBanner 
+      #courseFinder.scrollbox 
+        #courseId 
+        #courseName 
+        #courseDescription 
+        #courseCredits
