@@ -8,7 +8,6 @@ var logger = require('morgan');
 // Make sure to add to APP.USE below
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-// var loginRouter = require('./routes/login');
 
 var app = express();
 
@@ -24,9 +23,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // USE DIRECTORIES
 // Make sure to add an entry in /routes
+// index.js holds the default '/' directory, so include all other routes there
+// If you're getting weird errors about the path, chances are it only works without adding it
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-// app.use('/login', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
