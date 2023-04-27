@@ -1,0 +1,10 @@
+extends layout 
+
+block content 
+    h1 Login
+    form#loginForm(action="/login/validate", method="POST") 
+        label(for='username') Username: 
+        input(type='text', id='username', name='username', required)
+        label(for='password') Password: 
+        input(type='password', id='password', name='password', required)
+        button(type='submit') Login
