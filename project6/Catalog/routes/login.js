@@ -23,8 +23,12 @@ router.post('/validate', async function(req, res, next) {
             await bcrypt.compare(password, user.PasswordHash)
             .then((isValid) => {
                 if (isValid) {
-                    // Render index with john's name
-                    res.redirect('/?user=' + encodeURIComponent(user.UserName));
+                    // Set user session variable
+                    const sessionUser = req.session.user;
+                    if (sessionUser === undefined || sessionUser !== user.UserName) {
+                        req.session.user = user.UserName;
+                    }
+                    res.redirect('/');
                 } else {
                     res.render('login', {alert: error});
                 }
