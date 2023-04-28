@@ -1,19 +1,22 @@
 extends layout 
 
 block content 
+    if alert 
+        p= alert
+
     form#loginForm(action="/register/validate", method="POST") 
         h1 Register
         label(for='username') Username
         br
-        input(type='text', id='username', name='username', required)
+        input(type='text', id='username', name='username', required, oninvalid="this.setCustomValidity('Please provide a username')")
         br
         label(for='password') Password
         br
-        input(type='password', id='password', name='password', required)
+        input(type='password', id='password', name='password', required, oninvalid="this.setCustomValidity('Please provide a password')")
         br
         label(for='password') Confirm password
         br
-        input(type='password', id='retypedPassword', name='retypedPassword', required, oninvalid="this.setCustomValidity('Please retype password.')")
+        input(type='password', id='retypedPassword', name='retypedPassword', required, oninvalid="this.setCustomValidity('Please retype password')")
         br
         button(type='submit') Register
 

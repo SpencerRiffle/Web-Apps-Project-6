@@ -1,6 +1,9 @@
 extends layout 
 
 block content 
+    if alert 
+        p= alert
+
     form#loginForm(action="/login/validate", method="POST") 
         h1 Login
         label(for='username') Username

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var UserData = require('../db/models/jss_users.js')
+var users = require('../db/models/jss_users.js');
+var bcrypt = require('bcrypt');
 
 /* GET login listing */
 router.get('/', function(req, res, next) {
@@ -10,25 +11,28 @@ router.get('/', function(req, res, next) {
 /* Log in */
 router.post('/validate', async function(req, res, next) {
     // Get data from body
-    const { username, password } = req.body;
+    error = "Invalid username or password.";
+    success = "Logged in";
+    const {username, password} = req.body;
 
-    // Error checking
-    if (!username || !password) {
-        res.status(400).send("Missing username or password.");
-    } else {
-        // Find a matching user
-        const user = await UserData.findOne({username});
-        if (!user) {
-            res.status(401).send("Invalid username or password.");
-        } else {
+    // Find a matching user
+    await users.validateUser(username)
+    .then(async (user) => {
+        if (user) {
             // Validate password
-            const isValid = await user.validatePassword(password);
-            if (!isValid) {
-                res.status(401).send("Invalid username or password.");
-            } else {
-                // Redirect to home on success
-                res.redirect('/');
-            }
+            await bcrypt.compare(password, user.PasswordHash)
+            .then((isValid) => {
+                if (isValid) {
+                    // Render index with john's name
+                    res.redirect('/?user=' + encodeURIComponent(user.UserName));
+                } else {
+                    res.render('login', {alert: error});
+                }
+            });
+        } else {
+            res.render('login', {alert: error});
         }
-    }
+    });
 });
+
+module.exports = router;
