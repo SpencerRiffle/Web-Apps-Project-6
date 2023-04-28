@@ -12,12 +12,17 @@ router.post('/validate', async function(req, res, next) {
     // Get data from body
     const {username, password, retypedPassword} = req.body;
     // Create user
-    const user = await users.createUser(username, password);
-    if (user) {
-        res.render('register', {alert: "New user created!"});
-    } else {
-        res.render('register', {alert: user});
-    }
+    await users.createUser(username, password)
+    .then((user) => {
+        const success = "New user created!";
+        const fail = "User already exists.";
+        if (user) {
+            req.session.alert = success;
+        } else {
+            req.session.alert = fail;
+        }
+        res.redirect('/register');
+    });
 });
 
 module.exports = router;

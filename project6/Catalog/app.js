@@ -29,9 +29,16 @@ app.use(session({
   saveUninitialized: true
 }));
 
-// Retrieve user session variable (for client use)
+// Retrieve session variable (for client use)
 app.get('/session', (req, res) => {
-  res.json({ user: req.session.user });
+  res.json({ data: req.session });
+});
+
+// Remove session variable (for client use)
+app.get('/session/remove', (req, res) => {
+  const key = req.query.key;
+  delete req.session[key]; 
+  req.session.save();
 });
 
 app.use(logger('dev'));

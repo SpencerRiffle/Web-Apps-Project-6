@@ -1,6 +1,15 @@
 // Initialization
 $(document).ready(function() {
 
+    // Load session variable data
+    loadAlert();
+
+    // Redirect to login page
+    $("#loginButton").click(function(e) {
+        e.preventDefault();
+        toLogin();
+    });
+
     // Validate username
     $("#username").blur(function(e) {
         e.preventDefault();
@@ -13,6 +22,25 @@ $(document).ready(function() {
         validatePassword();
     });
 });
+
+async function loadAlert() {
+    // Print alert from session variable
+    fetch('/session')
+    .then(response => response.json())
+        .then(session => {
+            const alertBox = $("#alert");
+            const alert = session.data.alert;
+            alertBox.text(alert);
+
+            // We want the variable to disappear after usage
+            const key = "alert";
+            fetch("/session/remove?key=" + key);
+    });
+}
+
+function toLogin() {
+    window.location = "/login"
+}
 
 async function validateUsername() {
     // Collect form data ([0] gets the DOM object)

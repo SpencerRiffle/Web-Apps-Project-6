@@ -22,7 +22,7 @@ userSchema.static('createUser', async function(username, password) {
     // Validate input
     const existingUser = await users.findOne({UserName: username}).exec();
     if (existingUser) {
-        return existingUser;
+        return null;
     } else {
         // Create object to insert
         const salt = await bcrypt.genSalt(12);

@@ -11,7 +11,7 @@ async function loadUser() {
     .then(response => response.json())
         .then(session => {
             const student = $("#studentName");
-            const name = session.user;
+            const name = session.data.user;
             student.append(" " + name);
     });
 }

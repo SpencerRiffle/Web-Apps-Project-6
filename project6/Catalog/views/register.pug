@@ -1,9 +1,7 @@
 extends layout 
 
 block content 
-    if alert 
-        p= alert
-
+    #alert
     form#loginForm(action="/register/validate", method="POST") 
         h1 Register
         label(for='username') Username
@@ -18,7 +16,9 @@ block content
         br
         input(type='password', id='retypedPassword', name='retypedPassword', required, oninvalid="this.setCustomValidity('Please retype password')")
         br
-        button(type='submit') Register
+        #buttons
+            button(type='submit', id='registerButton', name='registerButton') Register
+            button(type='button' id='loginButton', name='loginButton') Login
 
     // Scripts
     script(src='../javascripts/registerFunctions.js')

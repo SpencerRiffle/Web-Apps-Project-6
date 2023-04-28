@@ -11,8 +11,7 @@ router.get('/', function(req, res, next) {
 /* Log in */
 router.post('/validate', async function(req, res, next) {
     // Get data from body
-    error = "Invalid username or password.";
-    success = "Logged in";
+    const error = "Invalid username or password.";
     const {username, password} = req.body;
 
     // Find a matching user
@@ -28,13 +27,17 @@ router.post('/validate', async function(req, res, next) {
                     if (sessionUser === undefined || sessionUser !== user.UserName) {
                         req.session.user = user.UserName;
                     }
+                    // Redirect to index on success
                     res.redirect('/');
                 } else {
-                    res.render('login', {alert: error});
+                    // Send message on fail
+                    req.session.alert = error;
+                    res.redirect('/login');
                 }
             });
         } else {
-            res.render('login', {alert: error});
+            // Redirect to login on fail
+            res.redirect('/login');
         }
     });
 });
