@@ -29,7 +29,7 @@ router.get('/', async function(req, res, next) {
   }
 
   // Set user's plans to NOT default
-  plans.find({username: user}).exec()
+  await plans.find({username: user}).exec()
   .then((results) => {
       if (!results) {
           console.error("Plans not found.");
@@ -56,23 +56,30 @@ router.get('/', async function(req, res, next) {
   })
 
   // Get default plan's majors
+  // Use planMajors.majors[i].major to get the actual major name(s)
   const planMajors = await plans.findOne({username: user, default: true})
   .populate({
     path: "major",
     model: majors
-  }).select("majors").exec()
-
+  }).select("majors").exec();
   if (!planMajors) {
     console.error("Error: Plan not found.");
-    return;
   }
 
-  // Log results
-  console.log(planMajors);
-  console.log("Printing individual majors...");
-  for (let i = 0; i < planMajors.major.length; i++) {
-    console.log(planMajors.major[i].major);
-  }
+  // Get default plan's catalog year
+  // Use planCatYear.catYear
+  const planCatYear = await plans.findOne({username: user, default: true}).select("catYear").exec();
+  console.log(planCatYear);
+
+  // Get all courses from its catalog
+
+
+  // Get all courses for the actual plan
+  
+
+  // Return a JSON object with all this info combined that some js function can use in /indexFunctions.js
+  // Maybe just directly call that function
+
 
   // Render the page
   res.render('index');
