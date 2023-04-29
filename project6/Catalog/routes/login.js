@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var users = require('../db/models/jss_users.js');
+var plans = require('../db/models/jss_plans.js');
 var bcrypt = require('bcrypt');
 
 /* GET login listing */
@@ -11,7 +12,8 @@ router.get('/', function(req, res, next) {
 /* Log in */
 router.post('/validate', async function(req, res, next) {
     // Get data from body
-    const error = "Invalid username or password.";
+    const invalidError = "Invalid username or password.";
+    const dbError = "Database corrupted.";
     const {username, password} = req.body;
 
     // Find a matching user
@@ -20,23 +22,31 @@ router.post('/validate', async function(req, res, next) {
         if (user) {
             // Validate password
             await bcrypt.compare(password, user.PasswordHash)
-            .then((isValid) => {
+            .then(async (isValid) => {
                 if (isValid) {
                     // Set user session variable
-                    const sessionUser = req.session.user;
-                    if (sessionUser === undefined || sessionUser !== user.UserName) {
-                        req.session.user = user.UserName;
-                    }
-                    // Redirect to index on success
-                    res.redirect('/');
+                    req.session.user = user.UserName;
+                    // Set plan session variable
+                    plans.findOne({username: req.session.user, default: true}).exec()
+                    .then((plan) => {
+                        if (plan) {
+                            req.session.plan = plan.planName;
+                            console.log("Set req.session.plan to: " + req.session.plan);
+                            // Redirect to index on success
+                            res.redirect('/');
+                        } else {
+                            req.session.alert = dbError;
+                            res.redirect('/login');
+                        }
+                    });
                 } else {
-                    // Send message on fail
-                    req.session.alert = error;
+                    req.session.alert = invalidError;
                     res.redirect('/login');
                 }
             });
         } else {
             // Redirect to login on fail
+            req.session.alert = invalidError;
             res.redirect('/login');
         }
     });

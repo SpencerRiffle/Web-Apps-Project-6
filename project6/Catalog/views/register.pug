@@ -1,9 +1,9 @@
 extends layout 
 
 block content 
-    #alert
     form#loginForm(action="/register/validate", method="POST") 
         h1 Register
+        #alert
         label(for='username') Username
         br
         input(type='text', id='username', name='username', required, oninvalid="this.setCustomValidity('Please provide a username')")
