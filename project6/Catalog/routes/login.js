@@ -31,6 +31,7 @@ router.post('/validate', async function(req, res, next) {
                     .then((plan) => {
                         if (plan) {
                             req.session.plan = plan._id;
+                            req.session.planName = plan.planName;
                             console.log("Set req.session.plan to: " + req.session.plan);
                             // Redirect to index on success
                             res.redirect('/');
