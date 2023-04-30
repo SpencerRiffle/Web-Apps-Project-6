@@ -14,4 +14,23 @@ async function loadUser() {
             const name = session.data.user;
             student.append(" " + name);
     });
+<<<<<<< Updated upstream
+=======
+}
+
+async function logJSON() {
+    const data = await fetch('/getCombined')
+    .then(response => response.json())
+    .then(data => {
+        console.log(JSON.parse(data));
+    })
+    .catch(error => console.error(error));    
+
+    const dataReq = await fetch('/getRequirments')
+    .then(response => response.json())
+    .then(data => {
+        console.log(JSON.parse(data));
+    })
+    .catch(error => console.error(error));
+>>>>>>> Stashed changes
 }
