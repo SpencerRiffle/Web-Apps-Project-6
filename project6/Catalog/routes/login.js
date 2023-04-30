@@ -30,7 +30,7 @@ router.post('/validate', async function(req, res, next) {
                     plans.findOne({username: req.session.user, default: true}).exec()
                     .then((plan) => {
                         if (plan) {
-                            req.session.plan = plan.planName;
+                            req.session.plan = plan._id;
                             console.log("Set req.session.plan to: " + req.session.plan);
                             // Redirect to index on success
                             res.redirect('/');
