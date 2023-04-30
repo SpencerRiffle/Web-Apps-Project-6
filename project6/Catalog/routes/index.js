@@ -8,10 +8,15 @@ var catalogCourses = require('../db/models/jss_catalogCourses.js');
 
 // Redirects to index pug
 router.get('/', async function(req, res, next) {
+  res.render('index');
+});
 
+// GetCombined
+router.get('/getCombined', async function(req, res, next) {
   // Get variables
   const user = req.session.user;
   const currentPlan = req.session.plan;
+  const currentPlanName = req.session.planName;
   const date = new Date();
   var year = date.getFullYear();
   var month = date.getMonth() + 1;
@@ -58,26 +63,29 @@ router.get('/', async function(req, res, next) {
   })
 
   // Get default plan's majors
-  // Use planMajors.majors[i].major to get the actual major name(s)
-  const planMajors = await plans.findOne({_id: currentPlan})
+  var planMajors = [];
+  const m = await plans.findOne({_id: currentPlan})
   .populate({
     path: "major",
     model: majors
   }).select("majors").exec();
-  if (!planMajors) {
+  if (!m) {
     console.error("Error: Plan not found for planMajors.");
   }
 
+  for (var i = 0; i < m.major.length; i++) {
+    planMajors[i] = m.major[i].major;
+  }
+
   // Get default plan's catalog year
-  // Use planCatYear.catYear
   const planCatYear = await plans.findOne({_id: currentPlan}).select("catYear").exec();
   if (!planCatYear) {
     console.error("Error: Plan not found for planCatYear.");
   }
 
   // Get all courses from its catalog
-  /*
-  const cc = await catalogCourses.find({})
+  var planCatalogCourses = "";
+  const cc = await catalogCourses.find({catalogYear: planCatYear.catYear})
   .populate({
     path: "course",
     model: courses
@@ -86,8 +94,21 @@ router.get('/', async function(req, res, next) {
     console.error(error);
   });
 
-  console.log(cc);
-  */
+  if (!cc) {
+    console.error("Error: Courses not found for catalogCourses.");
+  } 
+  else {
+    // "Select" statement
+    planCatalogCourses = cc.reduce((result, { course }) => {
+      result[course.courseId] = { 
+        id: course.courseId, 
+        name: course.name, 
+        credits: course.credits, 
+        description: course.description 
+      };
+      return result;
+    }, {});
+  }
 
   // Get all courses for the actual plan
   // Populate to fill in JOIN collections
@@ -118,17 +139,33 @@ router.get('/', async function(req, res, next) {
     .reduce((result, { year, term, course }) => {
       // collection[what goes on the outside] = {what, goes, inside}
       // Example: 'CS-1220': { year: 2021, term: 'Fall', courseId: 'CS-1220' }
-      result[course.courseId] = { year, term, courseId: course.courseId };
+      result[course.courseId] = { 
+        year, 
+        term, 
+        courseId: course.courseId 
+      };
       return result;
     }, {});
   }
 
-  // Return a JSON object with all this info combined that some js function can use in /indexFunctions.js
-  // Maybe just directly call that function
+  // Return a JSON object with all this info combined
+  const getCombined = JSON.stringify({
+    plan: {
+      catYear: planCatYear.catYear,
+      courses: planPlanCourses,
+      currTerm: term,
+      currYear: year.toString(),
+      majors: planMajors,
+      name: currentPlanName,
+      student: user
+    },
+    catalog: {
+      courses: planCatalogCourses,
+      year: planCatYear.catYear
+    }
+  });
 
-
-  // Render the page
-  res.render('index');
+  res.json(getCombined);
 });
 
 module.exports = router;

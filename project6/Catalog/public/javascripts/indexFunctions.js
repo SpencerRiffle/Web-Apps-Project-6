@@ -3,6 +3,7 @@ $(document).ready(function() {
 
     // Load session variable data
     loadUser();
+    logJSON();
 });
 
 async function loadUser() {
@@ -14,4 +15,13 @@ async function loadUser() {
             const name = session.data.user;
             student.append(" " + name);
     });
+}
+
+async function logJSON() {
+    const data = await fetch('/getCombined')
+    .then(response => response.json())
+    .then(data => {
+        console.log(JSON.parse(data));
+    })
+    .catch(error => console.error(error));
 }
