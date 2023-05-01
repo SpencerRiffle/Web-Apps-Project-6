@@ -361,3 +361,7 @@ li:nth-of-type(20) {
 		top: 95%;
 	}
 }
+
+#changeLog{
+	display:none;
+}

@@ -1,19 +1,19 @@
 extends layout
 
 block content
-  ul.fireflies 
-    li
-    li
-    li 
-    li 
-    li 
-    li 
-    li 
-    li 
-    li 
-    li 
-    li 
-    li
+  //- ul.fireflies 
+  //-   li
+  //-   li
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li
   // Banner
   #banner 
     #logobox 
@@ -27,7 +27,7 @@ block content
     #buttons 
       .button Logout 
       .button Options 
-      .button Save 
+      .button#save Save 
   
   // Content
   #content 
@@ -58,8 +58,10 @@ block content
           .year
           #notes
             input(type="textarea")
-            .button + Add Year
-            .button - Delete Year
+            .button#addYear + Add Year
+            .button#delYear - Delete Year
+          #changeLog
+          #profNotes input(type="textarea")
 
       // Lower Right
       #lowerRight.lower.quad

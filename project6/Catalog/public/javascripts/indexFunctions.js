@@ -118,36 +118,46 @@ function addToFaculty() {
 function refreshFunctionality() {
     checkReqs();
     
+    //draggable elements from the Plan in th UR
     $(".draggable").draggable({
         start: function (event, ui) {
             ui.helper.data('dropped', false);
+            ui.helper.data('sem', event.target.parentNode.id);
+            ui.helper.attr('semId', ui.helper.data('sem'));
             ui.helper.css("display", "none");
         },
         drag: function (){
-            $("body").css("cursor", "url('/img/cursor.png') 64 64, auto");
+            $("body").css("cursor", "url('/img/cursor.png') 64 64, auto"); //to signify drag
         },
         stop: function (event, ui) {
-            //Check value of ui.helper.data('dropped') and handle accordingly...
+            //Check value of ui.helper.data('dropped') and delete if not in droppable
             if (ui.helper.data('dropped') == false) {
                 $(this).remove();
+                $("#changeLog").append("DEL " + ui.helper.attr('semId') + " " + ui.helper.text() + "\n");
+                console.log($("#changeLog").text());
                 checkReqs();
                 calcCredits();
             }
         }
     });
     
+    //
     $(".semester").droppable({
         drop: function (event, ui) {
+            $("#changeLog").append("DEL " + $(ui.draggable).parent().attr("id") + " " + ui.helper.text() + "\n"); //add remove entry to change log from old semester
+            $("#changeLog").append("ADD " + this.id + " " + ui.helper.text() + "\n"); //add entry to change log. Save button modifies db
+            console.log($("#changeLog").text());
             if (ui.draggable.hasClass("draggable")) {
-                ui.helper.data('dropped', true);
-                ui.draggable.attr("style", "position: relative;").appendTo(this);
+                ui.helper.data('dropped', true);  //sucessfully dropped
+                ui.draggable.attr("style", "position: relative;").appendTo(this); //append to this semester
             }
+            //addable's are elements from the accordion in the UL
             else if (ui.draggable.hasClass("addable")) {
                 $(ui.draggable).clone()
                 .addClass("draggable course")
                 .removeClass("addable planned")
                 .attr("style", "position: relative;")
-                    .appendTo(this).children("img").remove();
+                    .appendTo(this).children("img").remove(); //remove req icon
                 }
             else {
                 $(ui.draggable).children('p').clone()
@@ -571,3 +581,17 @@ async function blink() {
         });
     }
 }
+
+//save button applies changeLog to database.
+$("#save").click(function(){
+    //send changeLog to server-side script to save to db
+    //send notes content to server-side
+
+});
+
+$("#addYear").click(function(){
+
+});
+$("#delYear").click(function(){
+    
+});
