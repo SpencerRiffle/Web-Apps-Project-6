@@ -26,6 +26,14 @@ async function logJSON() {
     return data;
 }
 
+async function logJSONgetReq() {
+    const data = await fetch('/getRequirments')
+        .then(response => response.json())
+        .then(data => {
+            return JSON.parse(data);
+        });
+    return data;
+}
 //begin code copied from project 5:
 
 // Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
