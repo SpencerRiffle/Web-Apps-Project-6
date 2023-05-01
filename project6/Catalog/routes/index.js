@@ -168,4 +168,72 @@ router.get('/getCombined', async function(req, res, next) {
   res.json(getCombined);
 });
 
+
+// GetRequirments
+router.get('/getRequirments', async function (req, res, next) {
+  // Get variables
+  const user = req.session.user;
+  const plnID = req.session.plan;
+  console.log("Session user: " + user + "\nSession PLN: " + plnID);
+
+  //Get major ids and name from current plan 
+  // Get default plan's majors
+  var currMajor = [];
+  const m = await plans.findOne({ _id: plnID })
+    .populate({
+      path: "major",
+      model: majors
+    }).select("majors").exec();
+  if (!m) {
+    console.error("Error: Plan not found for planMajors.");
+  }
+
+  for (var i = 0; i < m.major.length; i++) {
+    currMajor[i] = m.major[i].major;
+  }
+  var specReqs;
+  var groupedReq = [];
+  for (let i = 0; i < currMajor.length; i++) {
+    specReqs = await requirements.find({ major: currMajor[0] })
+      .populate({
+        path: "course",
+        model: courses
+      }).exec()
+      .catch((error) => {
+        console.log(error);
+      })
+    groupedReq.push(specReqs);
+  }
+  uniqueSpecReqs = specReqs.filter(req => !Array.isArray(req.course));
+  console.log(uniqueSpecReqs);
+
+  var core = [];
+  var electives = [];
+  var cognates = [];
+  var genEds = [];
+  for (item of uniqueSpecReqs) {
+    if (item.type == "cognate") {
+      cognates.push(item.course.courseId);
+    } else if (item.type == "elective") {
+      electives.push(item.course.courseId);
+    } else if (item.type == "core") {
+      core.push(item.course.courseId);
+    } else if (item.type == "gen-ed") {
+      genEds.push(item.course.courseId);
+    }
+  }
+
+  const getCombined = JSON.stringify({
+    categories: {
+      Core: core,
+      Electives: electives,
+      Cognates: cognates,
+      GenEds: genEds
+    }
+  });
+
+
+  res.json(getCombined);
+});
+
 module.exports = router;
