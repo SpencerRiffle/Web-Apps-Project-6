@@ -365,3 +365,31 @@ li:nth-of-type(20) {
 #changeLog{
 	display:none;
 }
+  
+  #dropper {
+	display: none;
+	position: relative;
+	z-index: 10;
+	color: white;
+	align-items: start;
+	text-align: start;
+	background-color: #000022;
+	border-radius: 5px; /* Add a border radius of 5px */
+	margin: 0;
+	padding: 0;
+  }
+  
+  .button:hover #dropper{
+	display: block;
+  }
+  
+  ul {
+	list-style: none;
+	margin: 1%;
+	padding: 1%;
+  }
+  
+  ul li {
+	margin: 0;
+	padding: 0;
+  }
