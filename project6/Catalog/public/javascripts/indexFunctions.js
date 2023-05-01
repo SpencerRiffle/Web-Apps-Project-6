@@ -24,4 +24,11 @@ async function logJSON() {
         console.log(JSON.parse(data));
     })
     .catch(error => console.error(error));
+    
+    const dataReq = await fetch('/getRequirments')
+    .then(response => response.json())
+    .then(data => {
+        console.log(JSON.parse(data));
+    })
+    .catch(error => console.error(error));
 }
