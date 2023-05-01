@@ -1,0 +1,18 @@
+extends layout 
+
+block content 
+    form#manageForm(action="/manage/render", method="POST") 
+        h1 Manage Plans
+        #alert
+        label(for='planName') Select a plan
+        br
+        // Display all plans associated with the user
+        select(name="planName", required)
+            each plan in plans
+                option(value=plan.planName) #{plan.planName}
+        br
+        #buttons
+            button(type='submit' id='loadButton', name='loadButton') Load
+
+    // Scripts
+    script(src='../javascripts/manageFunctions.js')

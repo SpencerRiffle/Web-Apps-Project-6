@@ -5,7 +5,11 @@ const db = require('../database.js');
 const catalogCourseSchema = new mongoose.Schema({
     catalogYear: {type: Number, required: true},
     course: {type: mongoose.Schema.Types.ObjectId, required: true, ref: "courses"},
-}, {collection: "jss_catalog_course"});
+},
+{
+    collection: "jss_catalog_course",
+    versionKey: false
+});
 
 // Set the usable model for querying
 const catalogCourses = db.model('catalogCourses', catalogCourseSchema);

@@ -9,9 +9,13 @@ var generator = require('crypto');
 // NEW DIRECTORIES
 // Make sure to add to APP.USE below
 var indexRouter = require('./routes/index');
+var facultyRouter = require('./routes/faculty');
+var adminRouter = require('./routes/admin');
 var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
 var registerRouter = require('./routes/register');
+var manageRouter = require('./routes/manage');
+var addRouter = require('./routes/add');
 
 var app = express();
 
@@ -66,9 +70,13 @@ app.use(auth);
 // THIS WON'T WORK UNLESS YOU EXPORT THE ROUTER IN YOUR .js FILE
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 app.use('/', indexRouter);
+app.use('/faculty', facultyRouter);
+app.use('/admin', adminRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
+app.use('/manage', manageRouter);
+app.use('/add', addRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -16,6 +16,16 @@ block content
         br
         input(type='password', id='retypedPassword', name='retypedPassword', required, oninvalid="this.setCustomValidity('Please retype password')")
         br
+        #role
+            label(for='student') Student
+            input#student(type='checkbox', name='role', value='Student', checked)
+            br
+            label(for='faculty') Faculty
+            input#faculty(type='checkbox', name='role', value='Faculty')
+            br
+            label(for='admin') Admin
+            input#admin(type='checkbox', name='role', value='Admin')
+        br
         #buttons
             button(type='submit', id='registerButton', name='registerButton') Register
             button(type='button' id='loginButton', name='loginButton') Login
