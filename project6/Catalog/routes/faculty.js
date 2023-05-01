@@ -5,7 +5,19 @@ var plans = require('../db/models/jss_plans.js').plans;
 
 // Redirects to faculty pug
 router.get('/', async function(req, res, next) {
+    // Check permission
+    if (req.session.hasOwnProperty('role')) {
+        if (req.session.role == 'Faculty') {
+            res.render('faculty');
+        } else {
+            res.redirect(req.headers.referer || '/login');
+        }
+    } else {
+        res.redirect(req.headers.referer || '/login');
+    }
+});
 
+router.get('/collect', async function(req, res, next) {
     // Get user
     const faculty = req.session.user;
 
@@ -32,12 +44,11 @@ router.get('/', async function(req, res, next) {
     
     Promise.all(mappings)
     .then(() => {
-        console.log(userPlans);
-        res.render('faculty', {users: userPlans});
+        res.json(userPlans);
     })
     .catch((error) => {
         console.error(error);
-        res.render('faculty');
+        res.json();
     });
 });
 

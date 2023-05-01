@@ -7,10 +7,18 @@ var planCourses = require('../db/models/jss_planCourses.js');
 var catalogCourses = require('../db/models/jss_catalogCourses.js');
 var requirements = require('../db/models/jss_requirments.js');
 
-
 // Redirects to index pug
 router.get('/', async function(req, res, next) {
-  res.render('index');
+  // Check permission
+  if (req.session.hasOwnProperty('role')) {
+    if (req.session.role == 'Student') {
+        res.render('index');
+    } else {
+      res.redirect(req.headers.referer || '/login');
+    }
+  } else {
+    res.redirect(req.headers.referer || '/login');
+  }
 });
 
 // GetCombined
@@ -207,7 +215,6 @@ router.get('/getRequirments', async function (req, res, next) {
     groupedReq.push(specReqs);
   }
   uniqueSpecReqs = specReqs.filter(req => !Array.isArray(req.course));
-  console.log(uniqueSpecReqs);
 
   var core = [];
   var electives = [];
