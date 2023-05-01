@@ -5,6 +5,8 @@ var majors = require('../db/models/jss_majors.js');
 var courses = require('../db/models/jss_courses.js');
 var planCourses = require('../db/models/jss_planCourses.js');
 var catalogCourses = require('../db/models/jss_catalogCourses.js');
+var requirements = require('../db/models/jss_requirments.js');
+
 
 // Redirects to index pug
 router.get('/', async function(req, res, next) {
