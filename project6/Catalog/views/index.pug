@@ -1,6 +1,19 @@
 extends layout
 
 block content
+  ul.fireflies 
+    li
+    li
+    li 
+    li 
+    li 
+    li 
+    li 
+    li 
+    li 
+    li 
+    li 
+    li
   // Banner
   #banner 
     #logobox 
@@ -19,38 +32,45 @@ block content
   // Content
   #content 
 
-    // Upper Left
-    #upperLeft 
-      h2 Requirements 
-      #accordion 
+    #left
+      // Upper Left
+      #upperLeft.upper.quad
+        h2 Requirements 
+        #accordion 
 
-    // Upper Right
-    #upperRight 
-      h2 Academic Plan 
-      p#studentCredits.condense Total Credits: 
-      .scrollbox 
-        .year
+      // Lower Left
+      #lowerLeft.lower.quad
+        h2 Links 
+        .button Home 
+        .button Josiah 
+        .button Silas 
+        .button Spencer 
+        // TODO: Delete; this is just a test link
+        .button
+          a(href="/users") Users Page
 
-    // Lower Left
-    #lowerLeft 
-      h2 Links 
-      button Home 
-      button Josiah 
-      button Silas 
-      button Spencer 
-      // TODO: Delete; this is just a test link
-      button
-        a(href="/users") Users Page
-    
-    // Lower Right
-    #lowerRight 
-      h2 Course Finder 
-      #courseFinderBanner 
-      #courseFinder.scrollbox 
-        #courseId 
-        #courseName 
-        #courseDescription 
-        #courseCredits
+    #right
+      // Upper Right
+      #upperRight.upper.quad
+        h2 Academic Plan 
+        p#studentCredits.condense Total Credits: 
+        .scrollbox
+          .year
+          #notes
+            input(type="textarea")
+            .button + Add Year
+            .button - Delete Year
+
+      // Lower Right
+      #lowerRight.lower.quad
+        h2 Course Finder 
+        #courseFinderBanner 
+        #courseFinder.scrollbox 
+          #courseId 
+          #courseName 
+          #courseDescription 
+          #courseCredits
+
 
   // Scripts
   script(src='../javascripts/indexFunctions.js')
