@@ -404,47 +404,56 @@ function calcCredits() {
     });
     $("#TotalCredits").text("Credits: " + totCred);
 }
+loadAccordion();
+async function loadAccordion() {
+    reqs = logJSONgetReq();
+    console.log(reqs);
+    // Variables to store text'
+    let categories
+    let core;
+    let cognates;
+    let elective;
+    let genEds;
+    await reqs.then(function (result) {
+        // Variables to store text
+        categories = result.categories;
+        cognates = result.categories.Cognates;
+        core = result.categories.Core;
+        elective = result.categories.Elective;
+        genEds = result.categories.GenEds;
+    });
 
-/*
-function loadAccordion() {
-    // Error handling
-    if (this.status != 200) {
-        console.log("Accordion data unavailable");
-        return;
-    }
-    
-    // Variables to store text
-    let requirements = $(".left div.section.upper");
-    
-    const catalog = this.response.catalog.courses;
-    const categories = this.response.categories;
+    let data = logJSON();
+    let catalog;
+    await data.then(function (result) {
+        catalog = result.catalog.courses;
+    });
+
+    let requirements = $("#accordion");
     // Create the accordion widget
     $(function () {
         requirements.accordion();
     });
-    
+
     // Populate accordion
     for (const category in categories) {
         // Create header block
-        const tab = categories[category];
-        // Hi Dr. Knoerr :) Don't judge our capitalization code ... Spencer wrote it (it's efficient)
+        console.log(category);
         requirements.append("<h3>" + category.charAt(0).toUpperCase() + category.substring(1) + "</h3>");
         courses = $("<div>");
-        
+
         // Add classes to block
-        tab.forEach(function (major) {
-            major.forEach(function (course) {
-                let p = $("<p>").addClass('planned addable');
-                p.append("<img>" + course + " " + catalog[course].name
-                + "<span style='display: none;'>" + catalog[course].credits + "</span>");
-                courses.append(p);
-            });
-            requirements.append(courses);
+        categories[category].forEach(function (course) {
+            //console.log(catalog[course].credits);
+            let p = $("<p>").addClass('planned addable');
+            p.append("<img>" + course + " " + catalog[course].name + "<span style='display: none;'>" + catalog[course].credits + "</span>");
+            courses.append(p);
         });
+        requirements.append(courses);
     }
+
     refreshFunctionality();
 }
-*/
 
 function grayHistory(currYear, currTerm) {
     // Variables to store text
