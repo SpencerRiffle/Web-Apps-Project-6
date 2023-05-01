@@ -4,6 +4,7 @@ $(document).ready(function () {
     // Load session variable data
     loadUser();
     logJSON();
+    makeFireFlies();
 });
 
 async function loadUser() {
@@ -579,12 +580,32 @@ async function courseFindInit() {
     refreshFunctionality();
 }
 
-function delay(milliseconds){
-    return new Promise(resolve => {
-        setTimeout(resolve, milliseconds);
-    });
+//save button applies changeLog to database.
+$("#save").click(function(){
+    //send changeLog to server-side script to save to db
+    //send notes content to server-side
+
+});
+
+$("#addYear").click(function(){
+
+});
+$("#delYear").click(function(){
+    
+});
+
+async function makeFireFlies() {
+    console.log("Generating fireflies...");
+    const numFireFlies = 12;
+    const jar = $('ul.fireflies');
+
+    for (let i = 0; i < numFireFlies; i++) {
+        const li = $('<li></li>').css('z-index', '-1');;
+        jar.append(li);
+    }
+    blink();
 }
-blink();
+
 async function blink() {
     for(let i = 0; i < 5000; i++){
         $(".fireflies li").each(async function(){
@@ -599,16 +620,8 @@ async function blink() {
     }
 }
 
-//save button applies changeLog to database.
-$("#save").click(function(){
-    //send changeLog to server-side script to save to db
-    //send notes content to server-side
-
-});
-
-$("#addYear").click(function(){
-
-});
-$("#delYear").click(function(){
-    
-});
+function delay(milliseconds){
+    return new Promise(resolve => {
+        setTimeout(resolve, milliseconds);
+    });
+}
