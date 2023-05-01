@@ -370,7 +370,7 @@ async function loadPlan() {
             credits.style = "margin: 0";
             newTerm.append(credits);
             newTerm.style.transform = "rotate(" + (Math.random() * 5 - 2.5) + "deg)";
-            newTerm.style.backgroundColor = "rgb(" + (Math.random() * 55 + 200) + ", " + (Math.random() * 55 + 200) + ", " + (Math.random() * 55 + 200) + ")";
+            newTerm.style.backgroundColor = "rgb(" + (Math.floor(Math.random() * 55) + 200 - 20) + ", " + (Math.floor(Math.random() * 35) + 140 - 20) + ", " + (Math.floor(Math.random() * 5) - 1) + ")";
             plan.appendChild(newTerm);
         }
     }
@@ -480,14 +480,18 @@ function grayHistory(currYear, currTerm) {
         if ((year[1] < currYear) || ((year[1] == currYear) && ((term.indexOf(year[0]) < term.indexOf(currTerm))))) {
             let cssSem = semesters[semester].parentNode;
             cssSem.style.backgroundColor = "rgba(" 
-            + (Math.random() * 50) + ", " + (Math.random() * 50) + ", " + (Math.random() * 50) + ", 0.8)";
+            + (Math.floor(Math.random() * 20) + 50) + ", " 
+            + (Math.floor(Math.random() * 20) + 50) + ", " 
+            + (Math.floor(Math.random() * 20) + 50) + ", 0.8)";
             cssSem.classList.add("dark");
             
         } else {
             //semesters[semester].parentNode.style.backgroundColor = "#00000099";
             let cssSem = semesters[semester].parentNode;
             cssSem.style.backgroundColor = "rgba(" 
-            + (Math.random() * 50) + ", " + (Math.random() * 50) + ", " + (Math.random() * 50) + ", 0.8)";
+            + (Math.floor(Math.random() * 20) + 50) + ", " 
+            + (Math.floor(Math.random() * 20) + 50) + ", " 
+            + (Math.floor(Math.random() * 20) + 50) + ", 0.8)";
             cssSem.classList.add("dark");
             break;
         }
@@ -607,9 +611,13 @@ async function makeFireFlies() {
 }
 
 async function blink() {
-    for(let i = 0; i < 5000; i++){
+    let numBlinks = 3000;
+    for(let i = 0; i < numBlinks; i++) {
         $(".fireflies li").each(async function(){
-            if (Math.random() > 0.5) {
+            if (i == numBlinks - 1) {
+                $(this).fadeTo(300, 0);
+            }
+            else if (Math.random() > 0.5) {
                 $(this).fadeTo(300, 0);
             }
             else {

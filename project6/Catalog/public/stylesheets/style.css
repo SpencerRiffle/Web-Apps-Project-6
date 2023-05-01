@@ -9,6 +9,8 @@ body {
 a {
 	text-decoration: none;
 	height: fit-content;
+	color: rgb(244, 167, 91);
+	text-shadow: 0, 0, 3px rgb(255, 230, 130);
 }
 
 .button {
@@ -178,8 +180,8 @@ h2 {
 }
 
 .quad {
-	box-shadow: inset 0 0 5px #00ff00, 0 0 5px #00ff00;
-	border: 1px solid #ccffcc;
+	box-shadow: inset 0 0 5px #ff9100, 0 0 5px #fff957;
+	border: 1px solid #ffdba8;
 }
 
 .fireflies li {
