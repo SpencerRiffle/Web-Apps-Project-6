@@ -1,0 +1,78 @@
+extends layout
+
+block content
+  //- ul.fireflies 
+  //-   li
+  //-   li
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li 
+  //-   li
+  // Banner
+  #banner 
+    #logobox 
+      img(src="/img/logo.png")#logo 
+    #studentInfo 
+      // Pipe chars preserve space at the end of a line
+      p#studentName Student: 
+      p#studentMajor Major: 
+      p#studentCatalog Catalog: 
+      p#studentMinor Minor:
+    #buttons 
+      .button Logout 
+      .button Options 
+      .button#save Save 
+  
+  // Content
+  #content 
+
+    #left
+      // Upper Left
+      #upperLeft.upper.quad
+        h2 Requirements 
+        #accordion 
+
+      // Lower Left
+      #lowerLeft.lower.quad
+        h2 Links 
+        .button Home 
+        .button Josiah 
+        .button Silas 
+        .button Spencer 
+        // TODO: Delete; this is just a test link
+        .button
+          a(href="/users") Users Page
+
+    #right
+      // Upper Right
+      #upperRight.upper.quad
+        h2 Academic Plan 
+        p#studentCredits.condense Total Credits: 
+        .scrollbox
+          #planCont
+          #notes
+            input(type="textarea" placeholder="Student Notes")
+            .button#addYear + Add Year
+            .button#delYear - Delete Year
+          input(type="textarea" placeholder="Faculty Notes")#profNotes
+          #changeLog
+
+      // Lower Right
+      #lowerRight.lower.quad
+        h2 Course Finder 
+        #courseFinderBanner 
+        #courseFinder.scrollbox 
+          #courseId 
+          #courseName 
+          #courseDescription 
+          #courseCredits
+
+
+  // Scripts
+  script(src='../javascripts/indexFunctions.js')
