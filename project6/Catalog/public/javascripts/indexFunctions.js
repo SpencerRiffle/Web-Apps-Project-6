@@ -543,17 +543,19 @@ async function courseFindInit() {
     let cSearch = $("#cSearch");
     cSearch.on("input", onInput);
     
-    function onInput() {
+async function onInput() {
+    let data = logJSON();
+    let courseList;
+    await data.then(function (response) {
+        courseList = response.catalog.courses;
+    });
     let input = cSearch.val();
-    $("#courseIdL").empty();
-    $("#courseNameL").empty();
-    $("#creditsL").empty();
-    $("#DescriptL").empty();
+    console.log(input);
+    $("#courseId").empty();
+    $("#courseName").empty();
+    $("#courseDescription").empty();
+    $("#courseCredits").empty();
 
-    $("#courseIdL").append("<strong>Course ID</strong>");
-    $("#courseNameL").append("<strong>Course Name</strong>");
-    $("#creditsL").append("<strong>Credits</strong>");
-    $("#DescriptL").append("<strong>Description</strong>");
 
     for (const corse in courseList) {
         let temp = courseList[corse];
@@ -562,21 +564,21 @@ async function courseFindInit() {
         let cred = courseList[id].credits;
         let desc = courseList[id].description;
 
-
-        if (id.includes(input.toUpperCase()) || cName.toUpperCase().includes(input.toUpperCase()) || desc.toUpperCase().includes(input.toUpperCase())) {
-            $("#courseIdL").append("<div class='addable1'>" + id
+        cred = cred.toString();
+        if (id.includes(input.toUpperCase()) || cName.toUpperCase().includes(input.toUpperCase()) || desc.toUpperCase().includes(input.toUpperCase()) || cred.toUpperCase().includes(input.toString().toUpperCase())) {
+            $("#courseId").append("<div class='addable1'>" + id
                 + "<p style='display: none;' class='draggable course'>"
                 + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
 
-            $("#courseNameL").append("<div class='addable1'>" + cName
+            $("#courseName").append("<div class='addable1'>" + cName
                 + "<p style='display: none;' class='draggable course'>"
                 + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
 
-            $("#creditsL").append("<div class='addable1'>" + cred
+            $("#courseCredits").append("<div class='addable1'>" + cred
                 + "<p style='display: none;' class='draggable course'>"
                 + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
 
-            $("#DescriptL").append("<div class='addable1'>" + desc
+            $("#courseDescription").append("<div class='addable1'>" + desc
                 + "<p style='display: none;' class='draggable course'>"
                 + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
         }
