@@ -21,27 +21,21 @@ async function logJSON() {
     const data = await fetch('/getCombined')
     .then(response => response.json())
     .then(data => {
+        return JSON.parse(data);
+    });
+    return data;
+}
+
+async function logJSONgetReq() {
+    const data = await fetch('/getRequirments')
+        .then(response => response.json())
+        .then(data => {
             return JSON.parse(data);
-        })
-    .then(response => response.json())
-    .then(data => {
-        console.log(JSON.parse(data));
-    })
-    .catch(error => console.error(error));
-    
-    const dataReq = await fetch('/getRequirments')
-    .then(response => response.json())
-    .then(data => {
-        console.log(JSON.parse(data));
-    })
-    .catch(error => console.error(error));
-    
-        return data;
+        });
+    return data;
 }
     
-    //begin code copied from project 5:
-    
-    // Write your JavaScript code.
+//begin code copied from project 5:
 window.onload = function () {
     refreshFunctionality();
 }
