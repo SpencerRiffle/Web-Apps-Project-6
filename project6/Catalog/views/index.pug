@@ -5,7 +5,7 @@ block content
   // Banner
   #banner 
     #logobox 
-      p Logo 
+      img(src="/img/logo.png")#logo 
     #studentInfo 
       // Pipe chars preserve space at the end of a line
       p#studentName Student: 
@@ -63,13 +63,14 @@ block content
         h2 Academic Plan 
         p#studentCredits.condense Total Credits: 
         .scrollbox
-          .year
-          #notes
-            input(type="textarea")
-            .button#addYear + Add Year
-            .button#delYear - Delete Year
-          #changeLog
-          #profNotes input(type="textarea")
+          #planCont
+          form#saveForm(action="/index/save", method="POST")
+            #notes
+              input(type="textarea" placeholder="Student Notes" name="studentNotes")
+              .button#addYear + Add Year
+              .button#delYear - Delete Year
+            input(type="textarea" placeholder="Faculty Notes" name="facultyNotes")#profNotes
+            input(type="text", name="changeLog")#changeLog
 
       // Lower Right
       #lowerRight.lower.quad
