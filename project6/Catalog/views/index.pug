@@ -1,19 +1,7 @@
 extends layout
 
 block content
-  ul.fireflies 
-    li
-    li
-    li 
-    li 
-    li 
-    li 
-    li 
-    li 
-    li 
-    li 
-    li 
-    li
+  ul.fireflies
   // Banner
   #banner 
     #logobox 
@@ -25,8 +13,31 @@ block content
       p#studentCatalog Catalog: 
       p#studentMinor Minor:
     #buttons 
-      .button Logout 
-      .button Options 
+      .button#logout Logout 
+      .button Options
+        #dropper
+              ul(style="list-style: none")
+                li
+                  a(href="/add") Create Plan
+                li
+                  a(href="/manage") Manage Plan
+                li
+                  a(href="") Print
+                li
+                  a(href="") Show Grades
+                li
+                  a(href="") Waiver
+                li
+                  a(href="") About
+                li
+                  a(href="") Waiver
+                li
+                  a(href="") About
+                li
+                  a(href="") Help
+                li
+                  a(href="") Report Abuse
+
       .button#save Save 
   
   // Content
@@ -44,10 +55,7 @@ block content
         .button Home 
         .button Josiah 
         .button Silas 
-        .button Spencer 
-        // TODO: Delete; this is just a test link
-        .button
-          a(href="/users") Users Page
+        .button Spencer
 
     #right
       // Upper Right
@@ -68,6 +76,13 @@ block content
       #lowerRight.lower.quad
         h2 Course Finder 
         #courseFinderBanner 
+        #courseSearchBox Course Search 
+          input.search(
+              type='text'
+              name='search'
+              placeholder='CS-1220'
+              id='cSearch'
+            )
         #courseFinder.scrollbox 
           #courseId 
           #courseName 

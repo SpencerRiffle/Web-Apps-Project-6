@@ -11,7 +11,6 @@ var generator = require('crypto');
 var indexRouter = require('./routes/index');
 var facultyRouter = require('./routes/faculty');
 var adminRouter = require('./routes/admin');
-var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
 var registerRouter = require('./routes/register');
 var manageRouter = require('./routes/manage');
@@ -45,6 +44,13 @@ app.get('/session/remove', (req, res) => {
   req.session.save();
 });
 
+// Remove session variable (for client use)
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  req.session.alert = "Logged out";
+  req.session.save();
+});
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -72,7 +78,6 @@ app.use(auth);
 app.use('/', indexRouter);
 app.use('/faculty', facultyRouter);
 app.use('/admin', adminRouter);
-app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/manage', manageRouter);

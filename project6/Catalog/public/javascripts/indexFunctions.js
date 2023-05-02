@@ -4,7 +4,21 @@ $(document).ready(function () {
     // Load session variable data
     loadUser();
     logJSON();
+    makeFireFlies();
+    $("#logout").click(async function(e) {
+        e.preventDefault();
+        await logout();
+    });
 });
+
+async function logout() {
+    fetch('/logout')
+        .then(response => response.json())
+        .then(data => {
+            return JSON.parse(data);
+        });
+    window.location.href = '/login';
+}
 
 async function loadUser() {
     // Print username from session variable
@@ -19,10 +33,10 @@ async function loadUser() {
 
 async function logJSON() {
     const data = await fetch('/getCombined')
-    .then(response => response.json())
-    .then(data => {
-        return JSON.parse(data);
-    });
+        .then(response => response.json())
+        .then(data => {
+            return JSON.parse(data);
+        });
     return data;
 }
 
@@ -33,6 +47,151 @@ async function logJSONgetReq() {
             return JSON.parse(data);
         });
     return data;
+}
+//begin code copied from project 5:
+
+// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+// for details on configuring this project to bundle and minify static web assets.
+
+loadAccordion();
+async function loadAccordion() {
+    reqs = logJSONgetReq();
+    console.log(reqs);
+    // Variables to store text'
+    let categories
+    let core;
+    let cognates;
+    let elective;
+    let genEds;
+    await reqs.then(function (result) {
+        // Variables to store text
+        categories = result.categories;
+        cognates = result.categories.Cognates;
+        core = result.categories.Core;
+        elective = result.categories.Elective;
+        genEds = result.categories.GenEds;
+    });
+
+    let data = logJSON();
+    let catalog;
+    await data.then(function (result) {
+        catalog = result.catalog.courses;
+    });
+
+    let requirements = $("#accordion");
+    // Create the accordion widget
+    $(function () {
+        requirements.accordion();
+    });
+
+    // Populate accordion
+    for (const category in categories) {
+        // Create header block
+        console.log(category);
+        requirements.append("<h3>" + category.charAt(0).toUpperCase() + category.substring(1) + "</h3>");
+        courses = $("<div>");
+
+        // Add classes to block
+        categories[category].forEach(function (course) {
+            //console.log(catalog[course].credits);
+            let p = $("<p>").addClass('planned addable');
+            p.append("<img>" + course + " " + catalog[course].name + "<span style='display: none;'>" + catalog[course].credits + "</span>");
+            courses.append(p);
+        });
+        requirements.append(courses);
+    }
+    
+    refreshFunctionality();
+}
+
+let cSearch = $("#cSearch");
+cSearch.on("input", onInput);
+
+async function onInput() {
+    let data = logJSON();
+    let courseList;
+    await data.then(function (response) {
+        courseList = response.catalog.courses;
+    });
+    let input = cSearch.val();
+    console.log(input);
+    $("#courseId").empty();
+    $("#courseName").empty();
+    $("#courseDescription").empty();
+    $("#courseCredits").empty();
+
+
+    for (const corse in courseList) {
+        let temp = courseList[corse];
+        let id = temp.id;
+        let cName = courseList[id].name;
+        let cred = courseList[id].credits;
+        let desc = courseList[id].description;
+
+        cred = cred.toString();
+        if (id.includes(input.toUpperCase()) || cName.toUpperCase().includes(input.toUpperCase()) || desc.toUpperCase().includes(input.toUpperCase()) || cred.toUpperCase().includes(input.toString().toUpperCase())) {
+            $("#courseId").append("<div class='addable1'>" + id
+                + "<p style='display: none;' class='draggable course'>"
+                + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
+
+            $("#courseName").append("<div class='addable1'>" + cName
+                + "<p style='display: none;' class='draggable course'>"
+                + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
+
+            $("#courseCredits").append("<div class='addable1'>" + cred
+                + "<p style='display: none;' class='draggable course'>"
+                + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
+
+            $("#courseDescription").append("<div class='addable1'>" + desc
+                + "<p style='display: none;' class='draggable course'>"
+                + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
+        }
+    }
+    refreshFunctionality();
+}
+
+//save button applies changeLog to database.
+$("#save").click(function(){
+    //send changeLog to server-side script to save to db
+    //send notes content to server-side
+
+});
+
+$("#addYear").click(function(){
+
+});
+$("#delYear").click(function(){
+    
+});
+
+async function makeFireFlies() {
+    console.log("Generating fireflies...");
+    const numFireFlies = 12;
+    const jar = $('ul.fireflies');
+
+    for (let i = 0; i < numFireFlies; i++) {
+        const li = $('<li></li>').css('z-index', '-1');;
+        jar.append(li);
+    }
+    blink();
+}
+
+async function blink() {
+    let numBlinks = 3000;
+    for(let i = 0; i < numBlinks; i++) {
+        $(".fireflies li").each(async function(){
+            if (i == numBlinks - 1) {
+                $(this).fadeTo(300, 0);
+            }
+            else if (Math.random() > 0.5) {
+                $(this).fadeTo(300, 0);
+            }
+            else {
+                $(this).fadeTo(300, 1);
+            }
+            await delay((Math.random() * 3000));
+        });
+    }
 }
     
 //begin code copied from project 5:
@@ -390,69 +549,12 @@ async function courseFindInit() {
     }
 
 
-    let cSearch = $("#cSearch");
-    cSearch.on("input", onInput);
-    
-    function onInput() {
-    let input = cSearch.val();
-    $("#courseIdL").empty();
-    $("#courseNameL").empty();
-    $("#creditsL").empty();
-    $("#DescriptL").empty();
-
-    $("#courseIdL").append("<strong>Course ID</strong>");
-    $("#courseNameL").append("<strong>Course Name</strong>");
-    $("#creditsL").append("<strong>Credits</strong>");
-    $("#DescriptL").append("<strong>Description</strong>");
-
-    for (const corse in courseList) {
-        let temp = courseList[corse];
-        let id = temp.id;
-        let cName = courseList[id].name;
-        let cred = courseList[id].credits;
-        let desc = courseList[id].description;
-
-
-        if (id.includes(input.toUpperCase()) || cName.toUpperCase().includes(input.toUpperCase()) || desc.toUpperCase().includes(input.toUpperCase())) {
-            $("#courseIdL").append("<div class='addable1'>" + id
-                + "<p style='display: none;' class='draggable course'>"
-                + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
-
-            $("#courseNameL").append("<div class='addable1'>" + cName
-                + "<p style='display: none;' class='draggable course'>"
-                + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
-
-            $("#creditsL").append("<div class='addable1'>" + cred
-                + "<p style='display: none;' class='draggable course'>"
-                + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
-
-            $("#DescriptL").append("<div class='addable1'>" + desc
-                + "<p style='display: none;' class='draggable course'>"
-                + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
-        }
-    }
-    refreshFunctionality();
-}
-
 function delay(milliseconds){
     return new Promise(resolve => {
         setTimeout(resolve, milliseconds);
     });
 }
-blink();
-async function blink() {
-    for(let i = 0; i < 5000; i++){
-        $(".fireflies li").each(async function(){
-            if (Math.random() > 0.5) {
-                $(this).fadeTo(300, 0);
-            }
-            else {
-                $(this).fadeTo(300, 1);
-            }
-            await delay((Math.random() * 3000));
-        });
-    }
-}
+
 
 //clicking add year adds a new row of semesters at the end of the plan
 $("#addYear").click(function(){

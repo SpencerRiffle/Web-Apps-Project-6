@@ -8,5 +8,9 @@ html(lang='en-US')
       script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
       link(rel='stylesheet', href='/stylesheets/style.css')
       link(rel="icon", href="/img/favicon.ico" type="image/x-icon")
+      script.
+        $(document).ready(function() {
+          $('.accordion').accordion();
+        });
   body
     block content

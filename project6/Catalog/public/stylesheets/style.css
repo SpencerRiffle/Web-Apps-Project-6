@@ -8,10 +8,13 @@ body {
 /* Elements */
 a {
 	text-decoration: none;
+	font: 1.2em "Fira Sans", sans-serif;
 	height: fit-content;
+	font-style: oblique;
+
 }
 
-p{
+p {
 	margin: 0.5em 1em;
 }
 
@@ -26,10 +29,11 @@ p{
 	background-color: none;
 	box-shadow: inset 0 0 10px white;
 }
-.button:hover{
+
+.button:hover {
 	background-color: white;
 	box-shadow: 0 0 20px white;
-	color:rgba(0, 0, 0, 0.5);
+	color: rgba(0, 0, 0, 0.5);
 	cursor: pointer;
 }
 
@@ -87,11 +91,11 @@ h2 {
 }
 
 .upper {
-	height: 400px;
+	height: 200px;
 	overflow-y: scroll;
 }
 
-#upperRight{
+#upperRight {
 	padding: 1em;
 }
 
@@ -103,8 +107,8 @@ h2 {
 
 #lowerRight {
 	padding: 1em;
-	height: 500px;
-	overflow-y: scroll;
+	height: 220px;
+
 }
 
 #studentInfo {
@@ -155,6 +159,10 @@ h2 {
 #courseFinder {
 	display: grid;
 	grid-template-columns: auto auto auto auto;
+	height: 130px;
+	box-shadow: inset 0 0 5px #00ff00, 0 0 5px #00ff00;
+	border: 1px solid #ccffcc;
+
 }
 
 #notes {
@@ -175,7 +183,7 @@ h2 {
 	white-space: nowrap;
 }
 
-#profNotes{
+#profNotes {
 	padding: 5px 1em;
 }
 
@@ -213,118 +221,119 @@ h2 {
 	z-index: -5;
 
 	animation: leftright 24s infinite cubic-bezier(0.39, 0, 0.63, 1),
-	updown 8s infinite 1.25s cubic-bezier(0.39, 0, 0.63, 1);
+		updown 8s infinite 1.25s cubic-bezier(0.39, 0, 0.63, 1);
 }
+
 /* first 10 */
 li:nth-of-type(1) {
-    animation-delay: 1s;
-    animation-duration: 65s, 81s, 0.01s;
-    animation-fill-mode: backwards, backwards;
+	animation-delay: 1s;
+	animation-duration: 65s, 81s, 0.01s;
+	animation-fill-mode: backwards, backwards;
 }
-  
+
 li:nth-of-type(2) {
-    animation-delay: 0.5s;
-    animation-duration: 80s, 75s, 0.01s;
+	animation-delay: 0.5s;
+	animation-duration: 80s, 75s, 0.01s;
 }
-  
+
 li:nth-of-type(3) {
-    animation-delay: 1.5s;
-    animation-duration: 70s, 60s, 0.01s;
-    animation-fill-mode: backwards, backwards;
+	animation-delay: 1.5s;
+	animation-duration: 70s, 60s, 0.01s;
+	animation-fill-mode: backwards, backwards;
 }
-  
+
 li:nth-of-type(4) {
-    animation-delay: 2.5s;
-    animation-duration: 90s, 80s, 0.01s;
+	animation-delay: 2.5s;
+	animation-duration: 90s, 80s, 0.01s;
 }
-  
+
 li:nth-of-type(5) {
-    animation-delay: 0.3s;
-    animation-duration: 55s, 75s, 0.01s;
+	animation-delay: 0.3s;
+	animation-duration: 55s, 75s, 0.01s;
 }
-  
+
 li:nth-of-type(6) {
-    animation-delay: 2.2s;
-    animation-duration: 79s, 63s, 0.01s;
-    animation-fill-mode: backwards, backwards;
+	animation-delay: 2.2s;
+	animation-duration: 79s, 63s, 0.01s;
+	animation-fill-mode: backwards, backwards;
 }
-  
+
 li:nth-of-type(7) {
-    animation-delay: 0.9s;
-    animation-duration: 70s, 80s, 0.01s;
+	animation-delay: 0.9s;
+	animation-duration: 70s, 80s, 0.01s;
 }
-  
+
 li:nth-of-type(8) {
-    animation-delay: 1.6s;
-    animation-duration: 50s, 40s, 0.01s;
-    animation-fill-mode: backwards, backwards;
+	animation-delay: 1.6s;
+	animation-duration: 50s, 40s, 0.01s;
+	animation-fill-mode: backwards, backwards;
 }
-  
+
 li:nth-of-type(9) {
-    animation-delay: 1.8s;
-    animation-duration: 77s, 88s, 0.01s;
+	animation-delay: 1.8s;
+	animation-duration: 77s, 88s, 0.01s;
 }
-  
+
 li:nth-of-type(10) {
-    animation-delay: 3s;
-    animation-duration: 87s, 73s, 0.01s;
-    animation-fill-mode: backwards, backwards;
+	animation-delay: 3s;
+	animation-duration: 87s, 73s, 0.01s;
+	animation-fill-mode: backwards, backwards;
 }
-  
+
 /* last 10 */
 li:nth-of-type(11) {
-    animation-delay: 1s;
-    animation-duration: 60s, 78s, 0.01s;
-    animation-fill-mode: backwards, backwards;
+	animation-delay: 1s;
+	animation-duration: 60s, 78s, 0.01s;
+	animation-fill-mode: backwards, backwards;
 }
-  
+
 li:nth-of-type(12) {
-    animation-delay: 0.5s;
-    animation-duration: 85s, 80s, 0.01s;
+	animation-delay: 0.5s;
+	animation-duration: 85s, 80s, 0.01s;
 }
-  
+
 li:nth-of-type(13) {
-    animation-delay: 1.5s;
-    animation-duration: 75s, 66s, 0.01s;
-    animation-fill-mode: backwards, backwards;
+	animation-delay: 1.5s;
+	animation-duration: 75s, 66s, 0.01s;
+	animation-fill-mode: backwards, backwards;
 }
-  
+
 li:nth-of-type(14) {
-    animation-delay: 2.5s;
-    animation-duration: 87s, 75s, 0.01s;
+	animation-delay: 2.5s;
+	animation-duration: 87s, 75s, 0.01s;
 }
-  
+
 li:nth-of-type(15) {
-    animation-delay: 0.3s;
-    animation-duration: 69s, 85s, 0.01s;
+	animation-delay: 0.3s;
+	animation-duration: 69s, 85s, 0.01s;
 }
-  
+
 li:nth-of-type(16) {
-    animation-delay: 2.2s;
-    animation-duration: 80s, 77s, 0.01s;
-    animation-fill-mode: backwards, backwards;
+	animation-delay: 2.2s;
+	animation-duration: 80s, 77s, 0.01s;
+	animation-fill-mode: backwards, backwards;
 }
-  
+
 li:nth-of-type(17) {
-    animation-delay: 0.9s;
-    animation-duration: 65s, 88s, 0.01s;
+	animation-delay: 0.9s;
+	animation-duration: 65s, 88s, 0.01s;
 }
-  
+
 li:nth-of-type(18) {
-    animation-delay: 1.6s;
-    animation-duration: 59s, 63s, 0.01s;
-    animation-fill-mode: backwards, backwards;
+	animation-delay: 1.6s;
+	animation-duration: 59s, 63s, 0.01s;
+	animation-fill-mode: backwards, backwards;
 }
-  
+
 li:nth-of-type(19) {
-    animation-delay: 1.8s;
-    animation-duration: 88s, 79s, 0.01s;
+	animation-delay: 1.8s;
+	animation-duration: 88s, 79s, 0.01s;
 }
-  
+
 li:nth-of-type(20) {
-    animation-delay: 3s;
-    animation-duration: 59s, 75s, 0.01s;
-    animation-fill-mode: backwards, backwards;
+	animation-delay: 3s;
+	animation-duration: 59s, 75s, 0.01s;
+	animation-fill-mode: backwards, backwards;
 }
 
 @keyframes leftright {
@@ -376,12 +385,43 @@ li:nth-of-type(20) {
 	}
 }
 
-#changeLog{
-	display:none;
+#changeLog {
+	display: none;
 }
-#addYear{
+
+#dropper {
+	display: none;
+	position: relative;
+	z-index: 10;
+	color: white;
+	align-items: start;
+	text-align: start;
+	background-color: #000022;
+	border-radius: 5px;
+	/* Add a border radius of 5px */
+	margin: 0;
+	padding: 0;
+}
+
+.button:hover #dropper {
+	display: block;
+}
+
+ul {
+	list-style: none;
+	margin: 1%;
+	padding: 1%;
+}
+
+ul li {
+	margin: 0;
+	padding: 0;
+}
+
+#addYear {
 	font-size: small;
 }
-#delYear{
+
+#delYear {
 	font-size: small;
 }

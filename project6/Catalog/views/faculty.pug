@@ -2,11 +2,15 @@ extends layout
 
 block content 
     h1 Faculty
-    h2 Students
-    each uid in Object.keys(users)
-        h3= uid
-        ul
-        each pid in users[uid]
-            li= pid
-    //- Figure out how to link "a(href=link)" to these
-    //- The goal is to sign in as that user with their session variables
+    form#loginForm(action="/login/validate", method="POST")
+        h2 Students
+        #alert
+        select(id='students', name='students', required)
+        br
+        select(id='plans', name='plans', required)
+        br
+        #buttons
+            button(type='submit' id='loginButton', name='loginButton') View
+
+        // Scripts
+        script(src='../javascripts/facultyFunctions.js')
