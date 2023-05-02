@@ -208,11 +208,11 @@ router.post('/save', async function(req, res, next) {
         }
 
         var data = new planCourses(item);
-        data.save();
+        await data.save();
       }
 
       else if(parts[0] == "DEL"){
-        const pc = await planCourses.deleteOne({plan: pID, courseId: cID.courseId}).exec()
+        await planCourses.deleteOne({plan: pID, courseId: cID.courseId}).exec()
         .catch((error) => {
           console.error(error);
         });
@@ -222,7 +222,6 @@ router.post('/save', async function(req, res, next) {
       }
     }
   });
-
   res.redirect("/");
 });
 
