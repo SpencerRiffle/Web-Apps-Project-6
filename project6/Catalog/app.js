@@ -44,6 +44,13 @@ app.get('/session/remove', (req, res) => {
   req.session.save();
 });
 
+// Remove session variable (for client use)
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  req.session.alert = "Logged out";
+  req.session.save();
+});
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

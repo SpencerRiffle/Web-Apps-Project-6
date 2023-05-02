@@ -5,7 +5,20 @@ $(document).ready(function () {
     loadUser();
     logJSON();
     makeFireFlies();
+    $("#logout").click(async function(e) {
+        e.preventDefault();
+        await logout();
+    });
 });
+
+async function logout() {
+    fetch('/logout')
+        .then(response => response.json())
+        .then(data => {
+            return JSON.parse(data);
+        });
+    window.location.href = '/login';
+}
 
 async function loadUser() {
     // Print username from session variable
