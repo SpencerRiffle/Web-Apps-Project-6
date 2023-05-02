@@ -513,5 +513,5 @@ $("#delYear").click(function(){
 $("#save").click(function(){
     //send changeLog to server-side script to save to db
     //send notes content to server-side
-    $("saveForm").submit();
+    $("#saveForm").submit();
 });
