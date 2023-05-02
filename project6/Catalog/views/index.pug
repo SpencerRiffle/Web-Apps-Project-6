@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  ul.fireflies
   // Banner
   #banner 
     #logobox 
@@ -10,62 +11,83 @@ block content
       p#studentName Student: 
       p#studentMajor Major: 
       p#studentCatalog Catalog: 
-      p#studentMinor Minor: Bible 
+      p#studentMinor Minor:
     #buttons 
       .button Logout 
-      .button Options 
-      .button Save 
+      .button Options
+        #dropper
+              ul(style="list-style: none")
+                li
+                  a(href="/add") Create Plan
+                li
+                  a(href="/manage") Manage Plan
+                li
+                  a(href="") Print
+                li
+                  a(href="") Show Grades
+                li
+                  a(href="") Waiver
+                li
+                  a(href="") About
+                li
+                  a(href="") Waiver
+                li
+                  a(href="") About
+                li
+                  a(href="") Help
+                li
+                  a(href="") Report Abuse
+
+      .button#save Save 
   
   // Content
   #content 
 
-    // Upper Left
-    #upperLeft 
-      h2 Requirements 
-      #accordion 
+    #left
+      // Upper Left
+      #upperLeft.upper.quad
+        h2 Requirements 
+        #accordion 
 
-    // Upper Right
-    #upperRight 
-      h2 Academic Plan 
-      p#studentCredits.condense Total Credits: 
-      .scrollbox 
-        .year 
-          .semester Fall 
-          .semester Spring 
-          .semester Summer
-        .year 
-          .semester Fall 
-          .semester Spring 
-          .semester Summer
-        .year 
-          .semester Fall 
-          .semester Spring 
-          .semester Summer
-        .year 
-          .semester Fall 
-          .semester Spring 
-          .semester Summer
+      // Lower Left
+      #lowerLeft.lower.quad
+        h2 Links 
+        .button Home 
+        .button Josiah 
+        .button Silas 
+        .button Spencer
 
-    // Lower Left
-    #lowerLeft 
-      h2 Links 
-      button Home 
-      button Josiah 
-      button Silas 
-      button Spencer 
-      // TODO: Delete; this is just a test link
-      button
-        a(href="/users") Users Page
-    
-    // Lower Right
-    #lowerRight 
-      h2 Course Finder 
-      #courseFinderBanner 
-      #courseFinder.scrollbox 
-        #courseId 
-        #courseName 
-        #courseDescription 
-        #courseCredits
+    #right
+      // Upper Right
+      #upperRight.upper.quad
+        h2 Academic Plan 
+        p#studentCredits.condense Total Credits: 
+        .scrollbox
+          .year
+          #notes
+            input(type="textarea")
+            .button#addYear + Add Year
+            .button#delYear - Delete Year
+          #changeLog
+          #profNotes input(type="textarea")
+
+      // Lower Right
+      #lowerRight.lower.quad
+        h2 Course Finder 
+        #courseFinderBanner 
+        #courseSearchBox Course Search 
+          input.search(
+              type='text'
+              name='search'
+              placeholder='CS-1220'
+              id='cSearch'
+            )
+        #courseFinder.scrollbox 
+          #courseId 
+          #courseName 
+          #courseDescription 
+          #courseCredits
+
 
   // Scripts
   script(src='../javascripts/indexFunctions.js')

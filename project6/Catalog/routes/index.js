@@ -7,10 +7,18 @@ var planCourses = require('../db/models/jss_planCourses.js');
 var catalogCourses = require('../db/models/jss_catalogCourses.js');
 var requirements = require('../db/models/jss_requirments.js');
 
-
 // Redirects to index pug
 router.get('/', async function(req, res, next) {
-  res.render('index');
+  // Check permission
+  if (req.session.hasOwnProperty('role')) {
+    if (req.session.role == 'Student') {
+        res.render('index');
+    } else {
+      res.redirect(req.headers.referer || '/login');
+    }
+  } else {
+    res.redirect(req.headers.referer || '/login');
+  }
 });
 
 // GetCombined
@@ -38,31 +46,25 @@ router.get('/getCombined', async function(req, res, next) {
   }
 
   // Set user's plans to NOT default
-  await plans.find({username: user}).exec()
-  .then((results) => {
-      if (!results) {
-          console.error("Plans not found when setting all plans to not default.");
-      } else {
-          // Iterate through results and set default to false
-          for (var i = 0; i < results.length; i++) {
-              results[i].default = false;
-              results[i].save();
-          }
-      }
-  })
+  const plansSetToNotDefault = await plans.find({username: user}).exec();
+  if (!plansSetToNotDefault) {
+    console.error("Plans not found when setting all plans to not default.");
+  } else {
+    // Iterate through results and set default to false
+    await Promise.all(plansSetToNotDefault.map(async (result) => {
+        result.default = false;
+        await result.save();
+    }));
+  }
 
   // Set user's active plan to default
-  .then(() => {
-    plans.findOne({username: user, _id: currentPlan}).exec()
-    .then((result) => {
-      if (!result) {
-          console.error("Error: Plan not found when setting default plan.");
-      } else {
-          result.default = true;
-          result.save();
-      }
-    });
-  })
+  const planSetToDefault = await plans.findOne({username: user, _id: currentPlan}).exec();
+  if (!planSetToDefault) {
+      console.error("Error: Plan not found when setting default plan.");
+  } else {
+      planSetToDefault.default = true;
+      await planSetToDefault.save();
+  }
 
   // Get default plan's majors
   var planMajors = [];
@@ -207,7 +209,6 @@ router.get('/getRequirments', async function (req, res, next) {
     groupedReq.push(specReqs);
   }
   uniqueSpecReqs = specReqs.filter(req => !Array.isArray(req.course));
-  console.log(uniqueSpecReqs);
 
   var core = [];
   var electives = [];
