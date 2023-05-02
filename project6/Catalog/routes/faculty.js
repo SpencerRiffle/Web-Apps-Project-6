@@ -6,12 +6,8 @@ var plans = require('../db/models/jss_plans.js').plans;
 // Redirects to faculty pug
 router.get('/', async function(req, res, next) {
     // Check permission
-    if (req.session.hasOwnProperty('role')) {
-        if (req.session.role == 'Faculty') {
-            res.render('faculty');
-        } else {
-            res.redirect(req.headers.referer || '/login');
-        }
+    if (req.session.hasOwnProperty('faculty')) {
+        res.render('faculty');
     } else {
         res.redirect(req.headers.referer || '/login');
     }
@@ -19,10 +15,9 @@ router.get('/', async function(req, res, next) {
 
 router.get('/collect', async function(req, res, next) {
     // Get user
-    const faculty = req.session.user;
+    const faculty = req.session.faculty;
 
     // Get all students associated with the user
-    // Username: faculty
     const students = await users.findOne({ UserName: faculty })
     .populate("Student")
     .exec()

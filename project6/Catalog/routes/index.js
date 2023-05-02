@@ -46,31 +46,25 @@ router.get('/getCombined', async function(req, res, next) {
   }
 
   // Set user's plans to NOT default
-  await plans.find({username: user}).exec()
-  .then((results) => {
-      if (!results) {
-          console.error("Plans not found when setting all plans to not default.");
-      } else {
-          // Iterate through results and set default to false
-          for (var i = 0; i < results.length; i++) {
-              results[i].default = false;
-              results[i].save();
-          }
-      }
-  })
+  const plansSetToNotDefault = await plans.find({username: user}).exec();
+  if (!plansSetToNotDefault) {
+    console.error("Plans not found when setting all plans to not default.");
+  } else {
+    // Iterate through results and set default to false
+    await Promise.all(plansSetToNotDefault.map(async (result) => {
+        result.default = false;
+        await result.save();
+    }));
+  }
 
   // Set user's active plan to default
-  .then(() => {
-    plans.findOne({username: user, _id: currentPlan}).exec()
-    .then((result) => {
-      if (!result) {
-          console.error("Error: Plan not found when setting default plan.");
-      } else {
-          result.default = true;
-          result.save();
-      }
-    });
-  })
+  const planSetToDefault = await plans.findOne({username: user, _id: currentPlan}).exec();
+  if (!planSetToDefault) {
+      console.error("Error: Plan not found when setting default plan.");
+  } else {
+      planSetToDefault.default = true;
+      await planSetToDefault.save();
+  }
 
   // Get default plan's majors
   var planMajors = [];

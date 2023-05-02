@@ -18,109 +18,101 @@ router.post('/validate', async function(req, res, next) {
     var username = "";
     var password = "";
     var facultyPlan = "";
-    if (req.session.role !== "Faculty") {
+    if (req.session.hasOwnProperty('faculty')) {
+        username = decodeURIComponent(req.body.students);
+        console.log("Using username: " + username);
+        facultyPlan = decodeURIComponent(req.body.plans);
+    } else {
         username = req.body.username;
         password = req.body.password;
-    } else {
-        username = decodeURIComponent(req.body.students);
-        facultyPlan = decodeURIComponent(req.body.plans);
-        console.log(req.body);
     }
 
     // Find a matching user
-    await users.validateUser(username)
-    .then(async (user) => {
-        if (user) {
-            // Validate password
-            var isValid = true;
-            if (req.session.role !== "Faculty") {
-                isValid = await bcrypt.compare(password, user.PasswordHash);
-            } else {
-                // Logging into a student from faculty view; omit password and pass in session variables
-                // Check role of person you're trying to log into to make sure it's a student!!!
-                const isValid = await users.users.findOne({UserName: username, Role: "Student"}).exec()
-                .catch((error) => {
-                    console.error(error);
-                    req.session.destroy();
-                });
+    console.log("Logging in: " + username);
+    const user = await users.validateUser(username);
+    if (user) {
+        // Validate password
+        var isValid = true;
+        if (!req.session.hasOwnProperty('faculty')) {
+            isValid = await bcrypt.compare(password, user.PasswordHash);
+        } else {
+            // Logging into a student from faculty view; omit password and pass in session variables
+            // Check role of person you're trying to log into to make sure it's a student!!!
+            isValid = await users.users.findOne({UserName: username, Role: "Student"}).exec()
+            .catch((error) => {
+                console.error(error);
+                req.session.destroy();
+            });
 
-                // Set facultyPlan to the student's default plan (the student is stored in isValid)
-                // Set user's plans to NOT default
-                await plans.find({username: username}).exec()
-                .then((results) => {
-                    if (!results) {
-                        console.error("Plans not found when setting all plans to not default.");
-                        req.session.destroy();
-                    } else {
-                        // Iterate through results and set default to false
-                        for (var i = 0; i < results.length; i++) {
-                            results[i].default = false;
-                            results[i].save();
-                        }
-                    }
-                })
+            // Set facultyPlan to the student's default plan (the student is stored in isValid)
+            // Set user's plans to NOT default
+            const plansSetToNotDefault = await plans.find({username: username}).exec();
+            if (!plansSetToNotDefault) {
+                console.error("Plans not found when setting all plans to not default.");
+                req.session.destroy();
+            } else {
+                // Iterate through results and set default to false
+                await Promise.all(plansSetToNotDefault.map(async (result) => {
+                    result.default = false;
+                    await result.save();
+                }));
 
                 // Set user's active plan to default
-                .then(() => {
-                    console.log("Setting for: " + username);
-                    console.log("With plan: " + facultyPlan);
-                    plans.findOne({username: username, planName: facultyPlan}).exec()
-                    .then((result) => {
-                    if (!result) {
-                        console.error("Error: Plan not found when setting default plan.");
-                        req.session.destroy();
-                    } else {
-                        result.default = true;
-                        result.save();
-                    }
-                    });
-                });
-            }
-
-            if (isValid) {
-                // Set user and role session variables
-                req.session.user = user.UserName;
-                const currentUser = await users.users.findOne({UserName: req.session.user}).exec()
-                .catch((error) => {
-                    console.error(error);
-                });
-                req.session.role = currentUser.Role;
-                // Determine next action by role
-                switch (req.session.role) {
-                    case "Admin":
-                        res.redirect('/admin');
-                        break;
-                    case "Faculty":
-                        res.redirect('/faculty');
-                        break;
-                    case "Student":
-                        // Set plan session variable
-                        plans.findOne({username: req.session.user, default: true}).exec()
-                        .then((plan) => {
-                            if (plan) {
-                                req.session.plan = plan._id;
-                                req.session.planName = plan.planName;
-                                res.redirect('/');
-                            } else {
-                                req.session.alert = dbError;
-                                res.redirect('/login');
-                            }
-                        });
-                        break;
-                    default:
-                        req.session.alert = roleError;
-                        res.redirect('/login');
+                const planSetToDefault = await plans.findOne({username: username, planName: facultyPlan}).exec();
+                if (!planSetToDefault) {
+                    console.error("Error: Plan not found when setting default plan.");
+                    req.session.destroy();
+                } else {
+                    planSetToDefault.default = true;
+                    await planSetToDefault.save();
                 }
-            } else {
-                req.session.alert = invalidError;
-                res.redirect('/login');
+            }
+        }
+
+        if (isValid) {
+            // Set user and role session variables
+            req.session.user = user.UserName;
+            const currentUser = await users.users.findOne({UserName: req.session.user}).exec()
+            .catch((error) => {
+                console.error(error);
+            });
+            req.session.role = currentUser.Role;
+            // Determine next action by role
+            switch (req.session.role) {
+                case "Admin":
+                    res.redirect('/admin');
+                    break;
+                case "Faculty":
+                    req.session.faculty = req.session.user;
+                    res.redirect('/faculty');
+                    break;
+                case "Student":
+                    // Set plan session variable
+                    plans.findOne({username: req.session.user, default: true}).exec()
+                    .then((plan) => {
+                        if (plan) {
+                            req.session.plan = plan._id;
+                            req.session.planName = plan.planName;
+                            res.redirect('/');
+                        } else {
+                            req.session.alert = dbError;
+                            res.redirect('/login');
+                        }
+                    });
+                    break;
+                default:
+                    req.session.alert = roleError;
+                    res.redirect('/login');
             }
         } else {
-            // Redirect to login on fail
             req.session.alert = invalidError;
             res.redirect('/login');
         }
-    });
+    } else {
+        // Redirect to login on fail
+        req.session.alert = invalidError;
+        res.redirect('/login');
+    }
 });
 
 module.exports = router;
