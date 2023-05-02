@@ -1,23 +1,23 @@
 extends layout
 
 block content
-  //- ul.fireflies 
-  //-   li
-  //-   li
-  //-   li 
-  //-   li 
-  //-   li 
-  //-   li 
-  //-   li 
-  //-   li 
-  //-   li 
-  //-   li 
-  //-   li 
-  //-   li
+  ul.fireflies 
+    li
+    li
+    li 
+    li 
+    li 
+    li 
+    li 
+    li 
+    li 
+    li 
+    li 
+    li
   // Banner
   #banner 
     #logobox 
-      p Logo 
+      img(src="/img/logo.png")#logo 
     #studentInfo 
       // Pipe chars preserve space at the end of a line
       p#studentName Student: 
@@ -55,13 +55,13 @@ block content
         h2 Academic Plan 
         p#studentCredits.condense Total Credits: 
         .scrollbox
-          .year
+          #planCont
           #notes
-            input(type="textarea")
+            input(type="textarea" placeholder="Student Notes")
             .button#addYear + Add Year
             .button#delYear - Delete Year
+          input(type="textarea" placeholder="Faculty Notes")#profNotes
           #changeLog
-          #profNotes input(type="textarea")
 
       // Lower Right
       #lowerRight.lower.quad
@@ -76,4 +76,3 @@ block content
 
   // Scripts
   script(src='../javascripts/indexFunctions.js')
-  
