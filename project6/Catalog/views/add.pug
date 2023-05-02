@@ -1,0 +1,31 @@
+extends layout 
+
+block content 
+    form#addForm(action="/add/add", method="POST") 
+        h1 Manage Plans
+        #alert
+        label(for='planName') Plan name 
+        br
+        input(type='text', id='planName', name='planName', required)
+        br
+        label(for='catYear') Catalog year
+        br
+        select(name="catYear", required)
+            each year in years
+                option(value=year) #{year}
+        br
+        label(for='majors') Select a major(s)
+        br
+        // Display all plans associated with the user
+        select(name="majors", multiple="multiple", required)
+            each major in majors
+                option(value=major) #{major}
+        br
+        label(for='default') Default: 
+        input(type='checkbox', id='default', name='default')
+        br
+        #buttons
+            button(type='submit' id='createButton', name='createButton') Create
+
+    // Scripts
+    script(src='../javascripts/manageFunctions.js')

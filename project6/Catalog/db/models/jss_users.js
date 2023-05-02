@@ -5,8 +5,18 @@ const bcrypt = require('bcrypt');
 // Set the parameters of what a queried model should have
 const userSchema = new mongoose.Schema({
     UserName: {type: String, required: true},
-    PasswordHash: {type: String, required: true}
-}, {collection: "users"});
+    PasswordHash: {type: String, required: true},
+    Role: {
+        type: String,
+        required: true,
+        enum: ["Student", "Faculty", "Admin"]
+    },
+    Student: [{type: mongoose.Schema.Types.ObjectId, required: true, ref: "users"}]
+}, 
+{
+    collection: "users",
+    versionKey: false
+});
 
 // Set the usable model for querying
 const users = db.model('users', userSchema);
@@ -18,7 +28,7 @@ userSchema.static('validateUser', async function(username) {
 });
 
 // Create a new user
-userSchema.static('createUser', async function(username, password) {
+userSchema.static('createUser', async function(username, password, role) {
     // Validate input
     const existingUser = await users.findOne({UserName: username}).exec();
     if (existingUser) {
@@ -29,7 +39,9 @@ userSchema.static('createUser', async function(username, password) {
         const hash = await bcrypt.hash(password, salt);
         const user = new users({
             UserName: username,
-            PasswordHash: hash
+            PasswordHash: hash,
+            Role: role,
+            Student: []
         });
         await user.save();
         return user;

@@ -1,6 +1,6 @@
 // Initialization
 $(document).ready(function () {
-
+    
     // Load session variable data
     loadUser();
     logJSON();
@@ -19,16 +19,29 @@ async function loadUser() {
 
 async function logJSON() {
     const data = await fetch('/getCombined')
-        .then(response => response.json())
-        .then(data => {
+    .then(response => response.json())
+    .then(data => {
             return JSON.parse(data);
-        });
-    return data;
+        })
+    .then(response => response.json())
+    .then(data => {
+        console.log(JSON.parse(data));
+    })
+    .catch(error => console.error(error));
+    
+    const dataReq = await fetch('/getRequirments')
+    .then(response => response.json())
+    .then(data => {
+        console.log(JSON.parse(data));
+    })
+    .catch(error => console.error(error));
+    
+        return data;
 }
-
-//begin code copied from project 5:
-
-// Write your JavaScript code.
+    
+    //begin code copied from project 5:
+    
+    // Write your JavaScript code.
 window.onload = function () {
     refreshFunctionality();
 }

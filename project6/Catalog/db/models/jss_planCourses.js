@@ -7,7 +7,11 @@ const planCourseSchema = new mongoose.Schema({
     course: {type: mongoose.Schema.Types.ObjectId, required: true, ref: "courses"},
     year: {type: Number, required: true},
     term: {type: String, required: true}
-}, {collection: "jss_plan_course"});
+}, 
+{
+    collection: "jss_plan_course",
+    versionKey: false
+});
 
 // Set the usable model for querying
 const planCourses = db.model('planCourses', planCourseSchema);

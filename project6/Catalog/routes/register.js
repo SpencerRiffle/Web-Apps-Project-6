@@ -10,9 +10,9 @@ router.get('/', function(req, res, next) {
 /* Register */
 router.post('/validate', async function(req, res, next) {
     // Get data from body
-    const {username, password, retypedPassword} = req.body;
+    const {username, password, role} = req.body;
     // Create user
-    await users.createUser(username, password)
+    await users.createUser(username, password, role)
     .then((user) => {
         const success = "New user created!";
         const fail = "User already exists.";

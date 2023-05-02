@@ -1,0 +1,12 @@
+extends layout 
+
+block content 
+    h1 Faculty
+    h2 Students
+    each uid in Object.keys(users)
+        h3= uid
+        ul
+        each pid in users[uid]
+            li= pid
+    //- Figure out how to link "a(href=link)" to these
+    //- The goal is to sign in as that user with their session variables

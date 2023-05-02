@@ -21,6 +21,17 @@ $(document).ready(function() {
         e.preventDefault();
         validatePassword();
     });
+
+    // Only one of the checkboxes can be checked
+    $("#role input[type='checkbox']").click(function() {
+        if (!this.checked) {
+            this.checked = true;
+        } else {
+            $("#role input[type='checkbox']")
+            .not(this)
+            .prop("checked", false);
+        }
+    });
 });
 
 async function loadAlert() {
