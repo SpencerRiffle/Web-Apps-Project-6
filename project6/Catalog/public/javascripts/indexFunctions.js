@@ -53,7 +53,7 @@ function refreshFunctionality() {
             if (ui.helper.data('dropped') == false) {
                 $(this).remove();
                 $("#changeLog").append("DEL " + ui.helper.attr('semId') + " " + ui.helper.text() + "\n");
-                //console.log($("#changeLog").text());
+                console.log($("#changeLog").text());
                 checkReqs();
                 calcCredits();
             }
@@ -65,7 +65,7 @@ function refreshFunctionality() {
         drop: function (event, ui) {
             $("#changeLog").append("DEL " + $(ui.draggable).parent().attr("id") + " " + ui.helper.text() + "\n"); //add remove entry to change log from old semester
             $("#changeLog").append("ADD " + this.id + " " + ui.helper.text() + "\n"); //add entry to change log. Save button modifies db
-            //console.log($("#changeLog").text());
+            console.log($("#changeLog").text());
             if (ui.draggable.hasClass("draggable")) {
                 ui.helper.data('dropped', true);  //sucessfully dropped
                 ui.draggable.attr("style", "position: relative;").appendTo(this); //append to this semester
@@ -451,9 +451,7 @@ async function blink() {
 $("#addYear").click(function(){
     //find the year of the last semester listed
     let $latestYear = parseInt($("#planCont .year").last().find(".semester").last().find("h2").text().split(" ")[1]);
-    //console.log($latestYear);
     let nextYear = $latestYear + 1;
-    //console.log(nextYear);
 
     //new semester ids
     let fid = "Fall" + $latestYear;
@@ -495,7 +493,7 @@ $("#delYear").click(function(){
         let $deletedCourses = $years.find(".semester").find("p").not(".credits");
         $deletedCourses.each(function(){
             $("#changeLog").append("DEL " + $(this).parent().id + " " + $(this).text() + "\n"); //add remove entry to change log from deleted year
-            //console.log($("#changeLog"));
+            console.log($("#changeLog"));
         });
         $years.remove();
     }
@@ -508,5 +506,5 @@ $("#delYear").click(function(){
 $("#save").click(function(){
     //send changeLog to server-side script to save to db
     //send notes content to server-side
-
+    $("saveForm").submit();
 });

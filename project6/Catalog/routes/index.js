@@ -168,4 +168,37 @@ router.get('/getCombined', async function(req, res, next) {
   res.json(getCombined);
 });
 
+router.get('/save', async function(req, res, next) {
+  let planId = req.session.plan;
+  let sN = req.body.studentNotes;
+  let fN = req.body.facultyNotes;
+  let cL = req.body.changeLog;
+
+  //clean change Log
+  //each line of change log
+  cL.split("\n").forEach(function(line){
+    //each part of the line( only care about first three)
+    let parts = line.split(" ");
+
+    //DEL logs that come from adding course from accordion or course finder are throw-away
+    if(!parts[1] == "courseName"){
+      if(parts[0] == "ADD"){
+          var item = {
+            
+          }
+      }
+      else if(parts[0] == "DEL"){
+
+      }
+      else{
+        console.log("error finding parts");
+      }
+    }
+
+
+  });
+
+  res.redirect("/");
+});
+
 module.exports = router;

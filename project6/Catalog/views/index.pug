@@ -56,12 +56,13 @@ block content
         p#studentCredits.condense Total Credits: 
         .scrollbox
           #planCont
-          #notes
-            input(type="textarea" placeholder="Student Notes")
-            .button#addYear + Add Year
-            .button#delYear - Delete Year
-          input(type="textarea" placeholder="Faculty Notes")#profNotes
-          #changeLog
+          form#saveForm(action="/index/save", method="POST")
+            #notes
+              input(type="textarea" placeholder="Student Notes" name="studentNotes")
+              .button#addYear + Add Year
+              .button#delYear - Delete Year
+            input(type="textarea" placeholder="Faculty Notes" name="facultyNotes")#profNotes
+            input(type="text", name="changeLog")#changeLog
 
       // Lower Right
       #lowerRight.lower.quad
