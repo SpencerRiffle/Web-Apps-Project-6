@@ -1,11 +1,11 @@
 // Initialization
 $(document).ready(function () {
-    
+
     // Load session variable data
     loadUser();
     logJSON();
-    //makeFireFlies();
-    $("#logout").click(async function(e) {
+    makeFireFlies();
+    $("#logout").click(async function (e) {
         e.preventDefault();
         await logout();
     });
@@ -48,6 +48,25 @@ async function logJSONgetReq() {
         });
     return data;
 }
+
+async function logJSONgetNotes() {
+    const data = await fetch('/getNotes')
+        .then(response => response.json())
+        .then(data => {
+
+            return data;
+        });
+    return data;
+}
+
+loadNotes();
+async function loadNotes() {
+    let allNotes = await logJSONgetNotes();
+
+    $("#studNotes").val(allNotes.s);
+    $("#profNotes").val(allNotes.f);
+
+}
 //begin code copied from project 5:
 
 // Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
@@ -56,7 +75,6 @@ async function logJSONgetReq() {
 loadAccordion();
 async function loadAccordion() {
     reqs = logJSONgetReq();
-    console.log(reqs);
     // Variables to store text'
     let categories
     let core;
@@ -87,20 +105,18 @@ async function loadAccordion() {
     // Populate accordion
     for (const category in categories) {
         // Create header block
-        console.log(category);
         requirements.append("<h3>" + category.charAt(0).toUpperCase() + category.substring(1) + "</h3>");
         courses = $("<div>");
 
         // Add classes to block
         categories[category].forEach(function (course) {
-            //console.log(catalog[course].credits);
             let p = $("<p>").addClass('planned addable');
             p.append("<img>" + course + " " + catalog[course].name + "<span style='display: none;'>" + catalog[course].credits + "</span>");
             courses.append(p);
         });
         requirements.append(courses);
     }
-    
+
     refreshFunctionality();
 }
 
@@ -114,7 +130,6 @@ async function onInput() {
         courseList = response.catalog.courses;
     });
     let input = cSearch.val();
-    console.log(input);
     $("#courseId").empty();
     $("#courseName").empty();
     $("#courseDescription").empty();
@@ -151,21 +166,20 @@ async function onInput() {
 }
 
 //save button applies changeLog to database.
-$("#save").click(function(){
+$("#save").click(function () {
     //send changeLog to server-side script to save to db
     //send notes content to server-side
 
 });
 
-$("#addYear").click(function(){
+$("#addYear").click(function () {
 
 });
-$("#delYear").click(function(){
-    
+$("#delYear").click(function () {
+
 });
 
 async function makeFireFlies() {
-    console.log("Generating fireflies...");
     const numFireFlies = 12;
     const jar = $('ul.fireflies');
 
@@ -178,8 +192,8 @@ async function makeFireFlies() {
 
 async function blink() {
     let numBlinks = 3000;
-    for(let i = 0; i < numBlinks; i++) {
-        $(".fireflies li").each(async function(){
+    for (let i = 0; i < numBlinks; i++) {
+        $(".fireflies li").each(async function () {
             if (i == numBlinks - 1) {
                 $(this).fadeTo(300, 0);
             }
@@ -193,7 +207,7 @@ async function blink() {
         });
     }
 }
-    
+
 //begin code copied from project 5:
 window.onload = function () {
     refreshFunctionality();
@@ -202,7 +216,7 @@ window.onload = function () {
 //This allows newly generated elements to become draggable
 function refreshFunctionality() {
     checkReqs();
-    
+
     //draggable elements from the Plan in th UR
     $(".draggable").draggable({
         start: function (event, ui) {
@@ -211,7 +225,7 @@ function refreshFunctionality() {
             ui.helper.attr('semId', ui.helper.data('sem'));
             ui.helper.css("display", "none");
         },
-        drag: function (){
+        drag: function () {
             $("body").css("cursor", "url('/img/cursor.png') 64 64, auto"); //to signify drag
         },
         stop: function (event, ui) {
@@ -219,19 +233,17 @@ function refreshFunctionality() {
             if (ui.helper.data('dropped') == false) {
                 $(this).remove();
                 $("#changeLog").val($("#changeLog").val() + "DEL " + ui.helper.attr('semId') + " " + ui.helper.text() + ",");
-                console.log($("#changeLog").val());
                 checkReqs();
                 calcCredits();
             }
         }
     });
-    
+
     //make semesters accept dragged courses and update change log
     $(".semester").droppable({
         drop: function (event, ui) {
             $("#changeLog").val($("#changeLog").val() + "DEL " + $(ui.draggable).parent().attr("id") + " " + ui.helper.text() + " ,"); //add remove entry to change log from old semester
             $("#changeLog").val($("#changeLog").val() + "ADD " + this.id + " " + ui.helper.text() + " ,"); //add entry to change log. Save button modifies db
-            console.log($("#changeLog").val());
             if (ui.draggable.hasClass("draggable")) {
                 ui.helper.data('dropped', true);  //sucessfully dropped
                 ui.draggable.attr("style", "position: relative;").appendTo(this); //append to this semester
@@ -239,33 +251,33 @@ function refreshFunctionality() {
             //addable's are elements from the accordion in the UL
             else if (ui.draggable.hasClass("addable")) {
                 $(ui.draggable).clone()
-                .addClass("draggable course")
-                .removeClass("addable planned")
-                .attr("style", "position: relative;")
-                    .appendTo(this).children("img").remove(); //remove req icon
-                }
+                    .addClass("draggable course")
+                    .removeClass("addable planned")
+                    .attr("style", "position: relative;")
+                    .appendTo(this); //remove req icon
+            }
             else {
                 $(ui.draggable).children('p').clone()
-                .addClass("draggable course")
-                .removeClass("addable1")
-                .attr("style", "position: relative;")
-                .appendTo(this);
+                    .addClass("draggable course")
+                    .removeClass("addable1")
+                    .attr("style", "position: relative;")
+                    .appendTo(this);
             }
             calcCredits();
             checkReqs();
             refreshFunctionality();
         }
     });
-    
+
     $(".addable").draggable({
         helper: "clone",
         start: function (event, ui) {
-            ui.helper.children("img").remove();
+            
         },
         revert: "invalid",
         revertDuration: 500
     });
-    
+
     $(".addable1").draggable({
         helper: function () {
             return $(this).clone().find("p").css("display", "");
@@ -274,27 +286,28 @@ function refreshFunctionality() {
         revertDuration: 500
     });
 
-    $(".semester").each(function(){
-        $(this).css("transform" , 'rotate(' + (Math.random() * 5 - 2.5) + 'deg)');
+    $(".semester").each(function () {
+        $(this).css("transform", 'rotate(' + (Math.random() * 5 - 2.5) + 'deg)');
     });
-    
+
     calcCredits();
     checkReqs();
 }
 
 //mark courses as met or not met
 function checkReqs() {
-    let $rs = $(".left .upper").find('p');
-    let $cs = $(".year").find('p');
+    let $rs = $("#accordion p");
+    let $cs = $(".semester p");
+    console.log($cs.length);
+    console.log($rs.length);
     
     for (let i = 0; i < $rs.length; i++) {
-        
-        $($rs[i]).find("img").attr("src", "/img/cross.png");
+
         $($rs[i]).removeClass("planned");
-        
+
         for (let j = 0; j < $cs.length; j++) {
+            console.log($($rs[i]).text());
             if ($($rs[i]).text() == $($cs[j]).text()) {
-                $($rs[i]).find("img").attr("src", "/img/check.png");
                 $($rs[i]).attr("class", "planned addable");
             }
         }
@@ -305,12 +318,6 @@ function checkReqs() {
 loadPlan();
 async function loadPlan() {
 
-    // Error handling CHANGE THIS TO PROMISE CHECK
-    // if (this.status != 200) {
-        // 	console.log("Course data unavailable");
-        // 	return;
-        // }
-        
     let data = logJSON();
     let student;
     let courses;
@@ -321,26 +328,26 @@ async function loadPlan() {
         courses = result.plan.courses;
         catalog = result.catalog.courses;
     });
-    
+
     // Load basic student info
     studentField = document.getElementById("studentName");
     majorField = document.getElementById("studentMajor");
     catalogField = document.getElementById("studentCatalog");
     minorField = document.getElementById("studentMinor");
-    
+
     let toInsert = student.student;
     toInsert = toInsert.substring(0, toInsert.indexOf('@'));
     studentField.innerHTML += toInsert;
     catalogField.innerHTML += student.catYear;
     minorField.innerHTML += "Bible";
-    
+
     let majorText = "";
     student.majors.forEach(function (major) {
         majorText += major + " ";
     });
     majorField.innerHTML += majorText;
 
-    
+
     // Set up initial semester blocks (Make 4 initially)
     let knownYears = [];
     let startYear = Number.MAX_SAFE_INTEGER;
@@ -363,12 +370,12 @@ async function loadPlan() {
             knownYears.push(obj.year);
         }
     };
-    
+
     // Load nodes into Academic Plan
     let numNodes = 0;
     let years = endYear - startYear;
     let currYear = startYear;
-    
+
     // If there are no courses in the plan...
     if (years < 0) {
         years = 4;
@@ -376,8 +383,8 @@ async function loadPlan() {
         currYear = date;
     }
     let terms = ["Fall", "Spring", "Summer"];
-    
-    
+
+
     let plan = document.querySelector("#planCont"); //container in plan to stick years in
 
     let i = 0;
@@ -385,19 +392,19 @@ async function loadPlan() {
         let newYear = document.createElement("div");
         newYear.classList.add("year");
 
-        for(let j = 0; j < 3; j++){
+        for (let j = 0; j < 3; j++) {
             // Adjust year
             if (terms[j] == "Spring") {
                 currYear += 1;
             }
-            
+
             // Insert node
             let newTerm = document.createElement("div");
             newTerm.setAttribute("class", "semester");
             newTerm.id = terms[j] + currYear.toString();
             newTerm.innerHTML = "<h2>" + terms[j] + " " + currYear.toString() + "</h2>";
             numNodes += 1;
-            
+
             // Insert credits
             let credits = document.createElement("p");
             credits.setAttribute("class", "credits");
@@ -416,12 +423,12 @@ async function loadPlan() {
     for (i = years; i < 4; i++) {
         let newYear = document.createElement("div");
         newYear.classList.add("year");
-        for(let j = 0; j < 3; j++){
+        for (let j = 0; j < 3; j++) {
             // Adjust year
             if (terms[j] == "Spring") {
                 currYear += 1;
             }
-            
+
             // Insert empty node
             let newTerm = document.createElement("div");
             newTerm.setAttribute("class", "semester");
@@ -440,11 +447,11 @@ async function loadPlan() {
 
     // Gray out historical semesters
     grayHistory(Number(student.currYear), student.currTerm);
-    
+
     // Load courses into semesters
     for (const course in courses) {
         const obj = courses[course];
-        
+
         // Get info from catalog and include course name from it
         let name = obj.courseId;
         let term = obj.term;
@@ -452,12 +459,12 @@ async function loadPlan() {
         let credits = Number(catalog[name].credits);
         name = catalog[name].name;
         let semesterId = `#${term}${year}`;
-        
+
         // Add course to semester
         let node = $(semesterId);
         node.append("<p class='draggable course'>" + obj.courseId + " " + name + "<span style='display: none;'>" + credits + "</span></p>");
     }
-    
+
     //calculate semester credits and total credits
     calcCredits();
     refreshFunctionality();
@@ -481,7 +488,7 @@ function grayHistory(currYear, currTerm) {
     // Variables to store text
     semesters = $(".semester h2");
     term = ["Fall", "Spring", "Summer"];
-    
+
     // Compare and gray
     for (semester in semesters) {
         let year = 0;
@@ -492,15 +499,15 @@ function grayHistory(currYear, currTerm) {
 
         if ((year[1] < currYear) || ((year[1] == currYear) && ((term.indexOf(year[0]) < term.indexOf(currTerm))))) {
             let cssSem = semesters[semester].parentNode;
-            cssSem.style.backgroundColor = "rgba(" 
-            + (Math.random() * 50) + ", " + (Math.random() * 50) + ", " + (Math.random() * 50) + ", 0.8)";
+            cssSem.style.backgroundColor = "rgba("
+                + (Math.random() * 50) + ", " + (Math.random() * 50) + ", " + (Math.random() * 50) + ", 0.8)";
             cssSem.classList.add("dark");
-            
+
         } else {
             //semesters[semester].parentNode.style.backgroundColor = "#00000099";
             let cssSem = semesters[semester].parentNode;
-            cssSem.style.backgroundColor = "rgba(" 
-            + (Math.random() * 50) + ", " + (Math.random() * 50) + ", " + (Math.random() * 50) + ", 0.8)";
+            cssSem.style.backgroundColor = "rgba("
+                + (Math.random() * 50) + ", " + (Math.random() * 50) + ", " + (Math.random() * 50) + ", 0.8)";
             cssSem.classList.add("dark");
             break;
         }
@@ -511,45 +518,40 @@ function grayHistory(currYear, currTerm) {
 //TODO data (calling logJSON) should be a global variable maybe
 courseFindInit();
 async function courseFindInit() {
-    // Error handling
-    // if (this.status != 200) {
-        //     console.log("Course Finder Could Not FullFill Purpose: Terminating All Life");
-        //     return;
-        // }
-        
-        let data = logJSON();
-        let courseList;
-        await data.then(function (response) {
-            courseList = response.catalog.courses;
-        });
-        
-        for (const course in courseList) {
-            let temp = courseList[course];
-            let id = temp.id;
-            let cName = courseList[id].name;
-            let cred = courseList[id].credits;
-            let desc = courseList[id].description;
-            $("#courseId").append("<div class='addable1'>" + id
+
+    let data = logJSON();
+    let courseList;
+    await data.then(function (response) {
+        courseList = response.catalog.courses;
+    });
+
+    for (const course in courseList) {
+        let temp = courseList[course];
+        let id = temp.id;
+        let cName = courseList[id].name;
+        let cred = courseList[id].credits;
+        let desc = courseList[id].description;
+        $("#courseId").append("<div class='addable1'>" + id
             + "<p style='display: none;' class='draggable course'>"
             + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
-            
-            $("#courseName").append("<div class='addable1'>" + cName
+
+        $("#courseName").append("<div class='addable1'>" + cName
             + "<p style='display: none;' class='draggable course'>"
             + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
-            
-            $("#courseCredits").append("<div class='addable1'>" + cred
+
+        $("#courseCredits").append("<div class='addable1'>" + cred
             + "<p style='display: none;' class='draggable course'>"
             + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
-            
-            $("#courseDescript").append("<div class='addable1'>" + desc
+
+        $("#courseDescript").append("<div class='addable1'>" + desc
             + "<p style='display: none;' class='draggable course'>"
             + id + " " + cName + "<span style='display: none;'>" + cred + "</span></p></div>");
-        }
-        refreshFunctionality();
     }
+    refreshFunctionality();
+}
 
 
-function delay(milliseconds){
+function delay(milliseconds) {
     return new Promise(resolve => {
         setTimeout(resolve, milliseconds);
     });
@@ -557,7 +559,7 @@ function delay(milliseconds){
 
 
 //clicking add year adds a new row of semesters at the end of the plan
-$("#addYear").click(function(){
+$("#addYear").click(function () {
     //find the year of the last semester listed
     let $latestYear = parseInt($("#planCont .year").last().find(".semester").last().find("h2").text().split(" ")[1]);
     let nextYear = $latestYear + 1;
@@ -566,11 +568,11 @@ $("#addYear").click(function(){
     let fid = "Fall" + $latestYear;
     let sid = "Spring" + nextYear;
     let suid = "Summer" + nextYear;
-    
+
     //deep copy last year
     let $clone = $("#planCont .year").last().clone();
     let $semesters = $clone.find(".semester");
-    
+
     //reset content and ids
     $clone.find(".semester:eq(0)").attr('id', fid);
     $clone.find(".semester:eq(1)").attr('id', sid);
@@ -583,36 +585,35 @@ $("#addYear").click(function(){
     $clone.find(".semester:eq(2) h2").text("Summer " + nextYear);
 
     //rotate and color new semesters
-    $semesters.each(function(){
+    $semesters.each(function () {
         $(this).css("backgroundColor", "rgb(" + (Math.random() * 55 + 200) + ", " + (Math.random() * 55 + 200) + ", " + (Math.random() * 55 + 200) + ")");
-        $(this).css("transform" , 'rotate(' + (Math.random() * 5 - 2.5) + 'deg)');
+        $(this).css("transform", 'rotate(' + (Math.random() * 5 - 2.5) + 'deg)');
     });
-    
+
     //add to plan
     $("#planCont").append($clone);
     refreshFunctionality();
 });
 
 //delete removes last year and modifies the change log accordingly
-$("#delYear").click(function(){
+$("#delYear").click(function () {
     let $years = $("#planCont .year");
-    if($years.length > 4){ //always show at least four years
+    if ($years.length > 4) { //always show at least four years
         $years = $years.last();
         // update log
         let $deletedCourses = $years.find(".semester").find("p").not(".credits");
-        $deletedCourses.each(function(){
+        $deletedCourses.each(function () {
             $("#changeLog").val($("#changeLog").val() + "DEL " + $(this).parent().id + " " + $(this).text() + " ,"); //add remove entry to change log from deleted year
-            console.log($("#changeLog").val());
         });
         $years.remove();
     }
-    else{
+    else {
         alert("Page shows a minimum of four years.");
     }
 });
 
 //save button applies changeLog to database.
-$("#save").click(function(){
+$("#save").click(function () {
     //send changeLog to server-side script to save to db
     //send notes content to server-side
     $("#saveForm").submit();

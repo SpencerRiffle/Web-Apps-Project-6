@@ -31,7 +31,6 @@ router.post('/render', async function(req, res, next) {
         if (p) {
             req.session.plan = p._id;
             req.session.planName = p.planName;
-            console.log("Set req.session.plan to: " + req.session.plan);
             res.redirect('/');
         } else {
             req.session.alert = loadError;

@@ -389,6 +389,20 @@ li:nth-of-type(20) {
 	display: none;
 }
 
+#profNotes{
+	width: 70%;
+}
+
+#upperLeft .planned{
+    color:lime;
+}
+
+#accordion p{
+	color: red;
+	z-index: 20;
+}
+
+
 #dropper {
 	display: none;
 	position: relative;
