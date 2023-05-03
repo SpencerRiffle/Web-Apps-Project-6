@@ -330,7 +330,9 @@ router.get('/getRequirments', async function (req, res, next) {
       .populate({
         path: "course",
         model: courses
-      }).exec();
+      }).exec()
+      .catch((error) => {
+      })
     groupedReq.push(specReqs);
   }
   uniqueSpecReqs = specReqs.filter(req => !Array.isArray(req.course));

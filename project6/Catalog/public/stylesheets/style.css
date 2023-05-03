@@ -398,10 +398,16 @@ li:nth-of-type(20) {
 }
 
 #accordion p{
-	color: red;
 	z-index: 20;
 }
 
+p img{
+	height: 1em;
+}
+
+a:visited{
+   color: white;
+}
 
 #dropper {
 	display: none;
@@ -418,7 +424,8 @@ li:nth-of-type(20) {
 }
 
 .button:hover #dropper {
-	display: block;
+	display: inline-block;
+	width: fit-content;
 }
 
 ul {

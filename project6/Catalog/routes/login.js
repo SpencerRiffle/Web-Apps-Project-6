@@ -20,7 +20,6 @@ router.post('/validate', async function(req, res, next) {
     var facultyPlan = "";
     if (req.session.hasOwnProperty('faculty')) {
         username = decodeURIComponent(req.body.students);
-        console.log("Using username: " + username);
         facultyPlan = decodeURIComponent(req.body.plans);
     } else {
         username = req.body.username;
@@ -28,7 +27,6 @@ router.post('/validate', async function(req, res, next) {
     }
 
     // Find a matching user
-    console.log("Logging in: " + username);
     const user = await users.validateUser(username);
     if (user) {
         // Validate password

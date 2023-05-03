@@ -254,7 +254,7 @@ function refreshFunctionality() {
                     .addClass("draggable course")
                     .removeClass("addable planned")
                     .attr("style", "position: relative;")
-                    .appendTo(this); //remove req icon
+                    .appendTo(this).children("img").remove(); //remove req icon
             }
             else {
                 $(ui.draggable).children('p').clone()
@@ -272,7 +272,7 @@ function refreshFunctionality() {
     $(".addable").draggable({
         helper: "clone",
         start: function (event, ui) {
-            
+            ui.helper.children("img").remove();
         },
         revert: "invalid",
         revertDuration: 500
@@ -298,16 +298,16 @@ function refreshFunctionality() {
 function checkReqs() {
     let $rs = $("#accordion p");
     let $cs = $(".semester p");
-    console.log($cs.length);
-    console.log($rs.length);
     
     for (let i = 0; i < $rs.length; i++) {
 
+        $($rs[i]).find("img").attr("src", "/img/cross.png");
         $($rs[i]).removeClass("planned");
 
         for (let j = 0; j < $cs.length; j++) {
             console.log($($rs[i]).text());
             if ($($rs[i]).text() == $($cs[j]).text()) {
+                $($rs[i]).find("img").attr("src", "/img/check.png");
                 $($rs[i]).attr("class", "planned addable");
             }
         }
