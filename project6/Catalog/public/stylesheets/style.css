@@ -386,7 +386,7 @@ li:nth-of-type(20) {
 }
 
 #changeLog {
-	/* display: none; */
+	display: none;
 }
 
 #dropper {

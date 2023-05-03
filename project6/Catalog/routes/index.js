@@ -184,8 +184,7 @@ router.post('/save', async function(req, res, next) {
   //clean change Log
   //each line of change log
   console.log(planId);
-  cLArray = cL.split(",");
-  cLArray.forEach(async function(line){
+  cL.split(",").forEach(async function(line){
     //each part of the line( only care about first three)
     let parts = line.split(" ");
     let cIDFromLog = parts[2];
