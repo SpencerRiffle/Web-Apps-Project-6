@@ -173,48 +173,58 @@ router.get('/getCombined', async function(req, res, next) {
 });
 
 router.post('/save', async function(req, res, next) {
-  console.log("attempting save");
+  console.log("ATTEMPTINGGGGGGGGGGGG SAAAAAAAAAAAAAAAAAAAAAAAAVVVVVVVVVVEEEEEEEE");
   let planId = req.session.plan;
   let sN = req.body.studentNotes;
   let fN = req.body.facultyNotes;
   let cL = req.body.changeLog;
 
+  cL = cL.slice(0, -2);
+
   //clean change Log
   //each line of change log
-  cL.split("\n").forEach(async function(line){
+  console.log(planId);
+  cLArray = cL.split(",");
+  cLArray.forEach(async function(line){
     //each part of the line( only care about first three)
     let parts = line.split(" ");
     let cIDFromLog = parts[2];
     
-    if(!parts[1] == "courseName"){//DEL logs that come from adding course from accordion or course finder are throw-away
-      
+    if(parts[1] != "courseName"){//DEL logs that come from adding course from accordion or course finder are throw-away      
       let termYear = parts[1];
       let termRx = /[A-Z, a-z]+/;
       let yearRx = /\d+/;
       let termNew = termYear.match(termRx);
       let yearNew = termYear.match(yearRx);
-
+      //console.log(cIDFromLog + " " + termNew + " " + yearNew + " " + " " + planId);
+      
       //find mongo course Id
       const cID = await courses.findOne({courseId: cIDFromLog}).exec()
       .catch((error) => {
         console.error(error);
       });
-
+      let courseString = cID._id.toString();
+      
       //for ADD logs
       if(parts[0] == "ADD"){
         var item = {
-          year: yearNew,
-          term: termNew,
-          courseId: cID.courseId,
+          year: yearNew[0],
+          term: termNew[0],
+          course: courseString,
           plan: planId          
         }
-
+        
         var data = new planCourses(item);
         await data.save();
       }
-
+      
       else if(parts[0] == "DEL"){
-        await planCourses.deleteOne({plan: pID, courseId: cID.courseId}).exec()
+        console.log(planId + "         " + cID._id);
+        console.log(courseString);
+        let del = await planCourses.findOneAndDelete({plan: planId, course: courseString}).exec()
+        .then((del) => {
+          console.log(del);
+        })
         .catch((error) => {
           console.error(error);
         });

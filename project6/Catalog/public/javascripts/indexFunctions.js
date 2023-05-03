@@ -4,7 +4,7 @@ $(document).ready(function () {
     // Load session variable data
     loadUser();
     logJSON();
-    makeFireFlies();
+    //makeFireFlies();
     $("#logout").click(async function(e) {
         e.preventDefault();
         await logout();
@@ -218,8 +218,8 @@ function refreshFunctionality() {
             //Check value of ui.helper.data('dropped') and delete if not in droppable
             if (ui.helper.data('dropped') == false) {
                 $(this).remove();
-                $("#changeLog").append("DEL " + ui.helper.attr('semId') + " " + ui.helper.text() + "\n");
-                console.log($("#changeLog").text());
+                $("#changeLog").val($("#changeLog").val() + "DEL " + ui.helper.attr('semId') + " " + ui.helper.text() + ",");
+                console.log($("#changeLog").val());
                 checkReqs();
                 calcCredits();
             }
@@ -229,9 +229,9 @@ function refreshFunctionality() {
     //make semesters accept dragged courses and update change log
     $(".semester").droppable({
         drop: function (event, ui) {
-            $("#changeLog").append("DEL " + $(ui.draggable).parent().attr("id") + " " + ui.helper.text() + "\n"); //add remove entry to change log from old semester
-            $("#changeLog").append("ADD " + this.id + " " + ui.helper.text() + "\n"); //add entry to change log. Save button modifies db
-            console.log($("#changeLog").text());
+            $("#changeLog").val($("#changeLog").val() + "DEL " + $(ui.draggable).parent().attr("id") + " " + ui.helper.text() + " ,"); //add remove entry to change log from old semester
+            $("#changeLog").val($("#changeLog").val() + "ADD " + this.id + " " + ui.helper.text() + " ,"); //add entry to change log. Save button modifies db
+            console.log($("#changeLog").val());
             if (ui.draggable.hasClass("draggable")) {
                 ui.helper.data('dropped', true);  //sucessfully dropped
                 ui.draggable.attr("style", "position: relative;").appendTo(this); //append to this semester
@@ -601,8 +601,8 @@ $("#delYear").click(function(){
         // update log
         let $deletedCourses = $years.find(".semester").find("p").not(".credits");
         $deletedCourses.each(function(){
-            $("#changeLog").append("DEL " + $(this).parent().id + " " + $(this).text() + "\n"); //add remove entry to change log from deleted year
-            console.log($("#changeLog"));
+            $("#changeLog").val($("#changeLog").val() + "DEL " + $(this).parent().id + " " + $(this).text() + " ,"); //add remove entry to change log from deleted year
+            console.log($("#changeLog").val());
         });
         $years.remove();
     }
